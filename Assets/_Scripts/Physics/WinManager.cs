@@ -8,8 +8,8 @@ public class WinManager : MonoBehaviour
     // Required destruction counts
     private Dictionary<string, int> requiredCounts = new Dictionary<string, int>()
     {
-        { "Boss", 1 },
-        { "Minion", 1 },
+        { "Boss", 5 },
+        { "Minion", 15 },
         //{ "GrayBall", 1 },
         //{ "BlackBall", 1 },
         //{ "WoodBarrel", 1 },

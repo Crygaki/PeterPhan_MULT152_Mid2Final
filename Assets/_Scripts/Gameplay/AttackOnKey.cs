@@ -12,8 +12,8 @@ public class AttackOnKey : MonoBehaviour
 
     void Update()
     {
+        //The following is for assigning a keyboard key in the Inspector
         if (Keyboard.current[key].wasPressedThisFrame)
-
         {
             target?.Damage(damageAmount);
             Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);

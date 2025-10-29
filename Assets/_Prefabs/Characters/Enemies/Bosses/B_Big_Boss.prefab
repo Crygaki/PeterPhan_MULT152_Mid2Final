@@ -133,7 +133,6 @@ GameObject:
   - component: {fileID: -6311976313334787336}
   - component: {fileID: 8365489274518724257}
   - component: {fileID: 6589020070651964511}
-  - component: {fileID: 6336082811557452522}
   - component: {fileID: 8138395870997756279}
   m_Layer: 0
   m_Name: B_Big_Boss
@@ -449,34 +448,6 @@ NavMeshAgent:
   m_BaseOffset: 3.6
   m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
---- !u!114 &6336082811557452522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3367801043851315927}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2566e67c08d6ac24780cc267eae81da4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PatrolChaseAI
-  agent: {fileID: 6589020070651964511}
-  points:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  player: {fileID: 0}
-  chaseDistance: 8
-  loseDistance: 12
-  eyeHeight: 1.2
-  repathRate: 0.2
-  sampleRange: 2
-  losMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  playerTag: Player
 --- !u!114 &8138395870997756279
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,12 +5,14 @@ public class MYUIManager : MonoBehaviour
 {
     public GameObject instructionPanel; // Holds instruction text + Play button
     public GameObject gameplayRoot;     // Root object to activate gameplay
-    public StarterAssetsInputs starterInputs; // Drag your Player here in Inspector
+    public StarterAssets.StarterAssetsInputs starterInputs; // Drag your Player here in Inspector
 
     void Start()
     {
         // Disable movement input at start
         starterInputs.enabled = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void StartGame()
