@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 2058358206394253666}
   - component: {fileID: 370795067105913233}
   m_Layer: 9
-  m_Name: PlayerArmature
+  m_Name: PlayerKachujin
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -375,6 +375,8 @@ MonoBehaviour:
   look: {x: 0, y: 0}
   jump: 0
   sprint: 0
+  shoot: 0
+  reload: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -540,9 +542,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e414b71c2e56d7488723cbd5c3e8c69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackOnKey
-  target: {fileID: 0}
-  damageAmount: 10
-  key: 20
   bulletPrefab: {fileID: 6853792246868454046, guid: 79795221e23b0c440b695fea8433503f, type: 3}
   firePoint: {fileID: 5247644256914959656}
 --- !u!114 &370795067105913233
