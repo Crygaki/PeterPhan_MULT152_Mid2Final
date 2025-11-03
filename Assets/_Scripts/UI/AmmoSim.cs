@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class AmmoSim : MonoBehaviour
 {
     [SerializeField] private AmmoUI ui;
-    [SerializeField] private InputBridge input;
+    [SerializeField] private InputBridgeMain input;
 
     [SerializeField] private UITK_HUD hud; 
 

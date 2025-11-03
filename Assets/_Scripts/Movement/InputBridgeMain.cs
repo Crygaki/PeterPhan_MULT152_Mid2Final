@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputBridge : MonoBehaviour
+public class InputBridgeMain : MonoBehaviour
 {
     public bool firePressed { get; private set; }
 
