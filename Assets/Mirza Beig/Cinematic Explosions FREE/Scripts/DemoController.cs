@@ -16,7 +16,8 @@ namespace MirzaBeig.CinematicExplosionsFree
             Day,
             Night,
         }
-        Camera camera;
+
+        new Camera camera;
 
         List<ParticleSystem> particleSystems;
         public Transform particleSystemsContainer;
