@@ -1594,6 +1594,38 @@ MonoBehaviour:
   spawnInterval: 5
   maxAlive: 20
   spawnOnStart: 1
+--- !u!1 &365860740
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 365860741}
+  m_Layer: 0
+  m_Name: ---Optimization---
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &365860741
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365860740}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -15.72365, y: 0.49753, z: -14.37297}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1938943062}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &399979090 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 656069295114274434, guid: 7640d67f182f26340af06fcc8f8e814e, type: 3}
@@ -6232,6 +6264,52 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b480f191dc10014a824278c3a7bb383, type: 3}
+--- !u!1 &1938943061
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1938943062}
+  - component: {fileID: 1938943063}
+  m_Layer: 0
+  m_Name: SimplePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1938943062
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938943061}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 365860741}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1938943063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938943061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d99ace38b6179847bee2f3aedd25e75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimplePool
+  prefab: {fileID: 6853792246868454046, guid: 79795221e23b0c440b695fea8433503f, type: 3}
+  warmup: 20
 --- !u!1 &1941291806
 GameObject:
   m_ObjectHideFlags: 0
@@ -7735,6 +7813,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 860381089}
     m_Modifications:
+    - target: {fileID: 2058358206394253666, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
+      propertyPath: pool
+      value: 
+      objectReference: {fileID: 1938943063}
     - target: {fileID: 2891274435510444387, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.48681
@@ -8403,3 +8485,4 @@ SceneRoots:
   - {fileID: 256346207}
   - {fileID: 451201782}
   - {fileID: 944283690}
+  - {fileID: 365860741}
