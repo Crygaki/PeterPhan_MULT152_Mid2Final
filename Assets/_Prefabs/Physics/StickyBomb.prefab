@@ -14,10 +14,9 @@ GameObject:
   - component: {fileID: 6260919533358201515}
   - component: {fileID: 3021410749202262501}
   - component: {fileID: 3898408597896741501}
-  - component: {fileID: 7134860769964733732}
-  - component: {fileID: -5327162796651394975}
+  - component: {fileID: 8822346356318793770}
   m_Layer: 0
-  m_Name: Bullet Fire
+  m_Name: StickyBomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,7 +157,7 @@ MonoBehaviour:
   lifeTime: 3
   target: {fileID: 0}
   damageAmount: 10
---- !u!114 &7134860769964733732
+--- !u!114 &8822346356318793770
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,22 +166,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6853792246868454046}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1695ddafd70f44349a67fadbde81709b, type: 3}
+  m_Script: {fileID: 11500000, guid: 687c390b7cd10194595e799fb16b02f3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StickyBomb
+  m_EditorClassIdentifier: Assembly-CSharp::StickyBombProjectile
+  speed: 20
   explosionDelay: 2
   explosionEffect: {fileID: 1007127540951276732, guid: 3ace37360f306cb4aac03640550fa9ef, type: 3}
---- !u!114 &-5327162796651394975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6853792246868454046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42446d1a8f553ad499f5388f1a45805b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PooledProjectile
-  speed: 8
-  life: 10

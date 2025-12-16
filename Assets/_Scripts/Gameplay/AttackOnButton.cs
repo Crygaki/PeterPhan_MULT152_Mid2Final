@@ -3,13 +3,10 @@ using UnityEngine.InputSystem;
 
 public class AttackOnButton : MonoBehaviour
 {
-    public SimplePool pool;         // Assign in Inpector
-    public GameObject bulletPrefab; // Assign in Inspector
+    public SimplePool pool;         // Assign in Inspector
     public Transform firePoint;     // Assign in Inspector
-    public bool usePool = true;
     private bool shoot;
 
-    // This method is automatically called by PlayerInput (SendMessage mode)
     public void OnShoot(InputValue value)
     {
         shoot = value.isPressed;
@@ -19,29 +16,16 @@ public class AttackOnButton : MonoBehaviour
     {
         if (shoot)
         {
-            if (usePool)
+            var go = pool.Get(firePoint.position, firePoint.rotation);
+            if (go != null)
             {
-                var go = pool.Get(firePoint.position, firePoint.rotation);
-                go.GetComponent<PooledProjectile>().Init(pool);
+                var bomb = go.GetComponent<StickyBombProjectile>();
+                if (bomb != null)
+                {
+                    bomb.Init(pool); // pooled sticky bomb
+                }
             }
-            else
-            {
-                FireBullet();
-            }
-            shoot = false; // Reset to avoid continuous firing
-        }
-    }
-
-    void FireBullet()
-    {
-        if (bulletPrefab != null && firePoint != null)
-        {
-            var go = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-            Destroy(go, 10f);
-        }
-        else
-        {
-            Debug.LogWarning("Missing bulletPrefab or firePoint reference.");
+            shoot = false;
         }
     }
 }
