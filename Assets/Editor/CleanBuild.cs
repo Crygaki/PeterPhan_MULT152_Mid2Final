@@ -40,15 +40,15 @@ public class CleanBuild
 
         // Scenes to include in build (in order)
         string[] scenes = {
-            "Assets/Scenes/MainMenu.unity",
-            "Assets/Scenes/Scene_0.unity",
-            "Assets/Scenes/GameOverScene.unity"
+            "Assets/_Scenes/MainMenu.unity",
+            "Assets/_Scenes/StickyBomb.unity",
+            "Assets/_Scenes/GameOverScene.unity"
         };
 
         // Perform fresh build
         BuildPipeline.BuildPlayer(
             scenes,
-            buildOutputPath + "/PickingPuzzle.exe",
+            buildOutputPath + "/StickyPuzzle.exe",
             BuildTarget.StandaloneWindows64,
             BuildOptions.None
         );

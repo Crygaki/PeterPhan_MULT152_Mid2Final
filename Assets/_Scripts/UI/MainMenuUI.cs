@@ -7,24 +7,23 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private TMP_Dropdown difficultyDropdown;
     [SerializeField] private TMP_Text difficultyLabel;
 
-    private const string DifficultyPrefKey = "SelectedDifficulty";
+    private SettingsData settings;
 
     void Start()
     {
+        settings = SettingsManager.LoadSettings();
+
         if (difficultyDropdown != null)
         {
-            // Always clear and repopulate options
             difficultyDropdown.ClearOptions();
             difficultyDropdown.options.Add(new TMP_Dropdown.OptionData("Easy"));
             difficultyDropdown.options.Add(new TMP_Dropdown.OptionData("Hard"));
             difficultyDropdown.options.Add(new TMP_Dropdown.OptionData("Extreme"));
 
-            // Load saved difficulty (default Easy if none saved)
-            int savedDifficulty = PlayerPrefs.GetInt(DifficultyPrefKey, 0);
-            difficultyDropdown.value = savedDifficulty;
-            OnDifficultyChanged(savedDifficulty);
+            // Set dropdown value based on enum
+            difficultyDropdown.value = (int)settings.selectedDifficulty;
+            OnDifficultyChanged(difficultyDropdown.value);
 
-            // Listen for changes
             difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
         }
 
@@ -48,8 +47,8 @@ public class MainMenuUI : MonoBehaviour
     {
         if (ScoreManager.Instance != null)
         {
-            ScoreManager.Instance.ResetHighScore(); // resets score + level for current difficulty
-            ShowHighScore(); // refresh UI immediately
+            ScoreManager.Instance.ResetHighScore();
+            ShowHighScore();
         }
     }
 
@@ -57,26 +56,29 @@ public class MainMenuUI : MonoBehaviour
     {
         if (ScoreManager.Instance == null) return;
 
-        switch (index)
+        DifficultyMode mode = (DifficultyMode)index;
+
+        switch (mode)
         {
-            case 0:
+            case DifficultyMode.Easy:
                 ScoreManager.Instance.SetDifficulty(DifficultyMode.Easy);
                 UpdateDifficultyLabel("Easy", Color.green);
                 break;
-            case 1:
+            case DifficultyMode.Hard:
                 ScoreManager.Instance.SetDifficulty(DifficultyMode.Hard);
                 UpdateDifficultyLabel("Hard", Color.yellow);
                 break;
-            case 2:
+            case DifficultyMode.Extreme:
                 ScoreManager.Instance.SetDifficulty(DifficultyMode.Extreme);
                 UpdateDifficultyLabel("Extreme", Color.red);
                 break;
         }
 
-        PlayerPrefs.SetInt(DifficultyPrefKey, index);
-        PlayerPrefs.Save();
+        // Save enum directly
+        settings.selectedDifficulty = mode;
+        SettingsManager.SaveSettings(settings);
 
-        ShowHighScore(); // refresh high score + level for selected difficulty
+        ShowHighScore();
     }
 
     private void UpdateDifficultyLabel(string modeName, Color color)

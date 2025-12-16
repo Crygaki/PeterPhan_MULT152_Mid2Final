@@ -10,6 +10,30 @@ public class StickyBombProjectile : MonoBehaviour
     private GameObject targetToDestroy;
     private float t;
 
+    // --- Cooldown fields ---
+    public static float cooldownTime = 1f; // 1 second between bombs
+    public static float lastFireTime = -Mathf.Infinity;
+
+    /// <summary>
+    /// Call this instead of directly spawning a bomb.
+    /// Returns true if bomb was successfully initialized, false if still on cooldown.
+    /// </summary>
+    public static bool TrySpawn(SimplePool p, Vector3 position, Quaternion rotation)
+    {
+        // Enforce cooldown
+        if (Time.time < lastFireTime + cooldownTime)
+        {
+            return false;
+        }
+
+        GameObject bomb = p.Get(position, rotation);
+        StickyBombProjectile proj = bomb.GetComponent<StickyBombProjectile>();
+        proj.Init(p);
+
+        lastFireTime = Time.time;
+        return true;
+    }
+
     public void Init(SimplePool p)
     {
         pool = p;
@@ -20,7 +44,6 @@ public class StickyBombProjectile : MonoBehaviour
         if (rb != null) rb.isKinematic = false;
         gameObject.SetActive(true);
 
-        // Find audio source once
         if (explosionAudio == null)
         {
             explosionAudio = GameObject.Find("AS_StickyBombEx")?.GetComponent<AudioSource>();
@@ -31,44 +54,36 @@ public class StickyBombProjectile : MonoBehaviour
     {
         if (!gameObject.activeSelf || pool == null) return;
 
-        // Move forward until collision
         transform.position += transform.forward * speed * Time.deltaTime;
         t += Time.deltaTime;
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        // Stick to target
         if (collision.rigidbody != null)
         {
             FixedJoint joint = gameObject.AddComponent<FixedJoint>();
             joint.connectedBody = collision.rigidbody;
         }
 
-        // Track target for destruction
-        if (collision.gameObject.CompareTag("Boss") || collision.gameObject.CompareTag("Minion") ||
-            collision.gameObject.CompareTag("GrayBall") || collision.gameObject.CompareTag("BlackBall") ||
-            collision.gameObject.CompareTag("WoodBarrel") || collision.gameObject.CompareTag("YellowBox") ||
-            collision.gameObject.CompareTag("RedBox"))
+        if (collision.gameObject.CompareTag("Boss") || collision.gameObject.CompareTag("MinionCapsule") ||
+            collision.gameObject.CompareTag("MinionCube") || collision.gameObject.CompareTag("MinionCylinder") ||
+            collision.gameObject.CompareTag("MinionSphere"))
         {
             targetToDestroy = collision.gameObject;
         }
 
-        // Start countdown to explosion
         Invoke(nameof(Explode), explosionDelay);
     }
 
     void Explode()
     {
-        // Spawn explosion effect
         if (explosionEffect != null)
             Instantiate(explosionEffect, transform.position, Quaternion.identity);
 
-        // Play audio
         if (explosionAudio != null)
             explosionAudio.Play();
 
-        // Apply explosion force
         Collider[] colliders = Physics.OverlapSphere(transform.position, 5f);
         foreach (Collider nearby in colliders)
         {
@@ -77,15 +92,13 @@ public class StickyBombProjectile : MonoBehaviour
                 rb.AddExplosionForce(500f, transform.position, 5f);
         }
 
-        // Destroy target if applicable
         if (targetToDestroy != null)
         {
             string type = targetToDestroy.tag;
-            WinManager.instance?.RegisterDestruction(type);
+            GameManager.instance?.ObjectDestroyed(type);
             Destroy(targetToDestroy);
         }
 
-        // Reset and return bomb to pool
         transform.SetParent(null);
         var rbSelf = GetComponent<Rigidbody>();
         if (rbSelf != null) rbSelf.isKinematic = false;

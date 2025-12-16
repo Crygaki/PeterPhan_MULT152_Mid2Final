@@ -57,7 +57,7 @@ Transform:
   m_GameObject: {fileID: 1972835830115088067}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.020312756, y: 0.44500005, z: 0.0008955002}
+  m_LocalPosition: {x: 0.20000008, y: 0.4450001, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -471,8 +471,12 @@ MonoBehaviour:
     m_ActionName: 'Player/Sprint[/Keyboard/leftShift,/XInputControllerWindows/leftTrigger]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: e4ce1614-c754-48c1-9103-33130441661f
-    m_ActionName: UI/New action
+    m_ActionId: 1773e373-3660-4ed6-9cea-3a0649ba9d5a
+    m_ActionName: 'Player/Fire[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fae7cf6f-5040-49a8-9f90-1b2bf9ac7859
+    m_ActionName: 'Player/Reload[/Keyboard/r]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -542,8 +546,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e414b71c2e56d7488723cbd5c3e8c69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackOnKey
-  bulletPrefab: {fileID: 6853792246868454046, guid: 79795221e23b0c440b695fea8433503f, type: 3}
+  pool: {fileID: 0}
   firePoint: {fileID: 5247644256914959656}
+  cooldownOverlay: {fileID: 0}
+  icon: {fileID: 0}
 --- !u!114 &370795067105913233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,7 +699,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6318577109456146364}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.48681, y: -0.37978, z: -0.11234999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

@@ -8,12 +8,11 @@ TagManager:
   - Pickup
   - Enemy
   - Boss
+  - MinionCapsule
+  - MinionCube
+  - MinionCylinder
+  - MinionSphere
   - Minion
-  - GrayBall
-  - BlackBall
-  - WoodBarrel
-  - YellowBox
-  - RedBox
   layers:
   - Default
   - TransparentFX

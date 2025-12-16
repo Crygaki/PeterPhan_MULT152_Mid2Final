@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 1547088081193408597}
   m_Layer: 0
   m_Name: E_Cube
-  m_TagString: Minion
+  m_TagString: MinionCube
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class WinManager : MonoBehaviour
 {
@@ -9,12 +10,10 @@ public class WinManager : MonoBehaviour
     private Dictionary<string, int> requiredCounts = new Dictionary<string, int>()
     {
         { "Boss", 5 },
-        { "Minion", 15 },
-        //{ "GrayBall", 1 },
-        //{ "BlackBall", 1 },
-        //{ "WoodBarrel", 1 },
-        //{ "YellowBox", 1 },
-        //{ "RedBox", 1 }
+        { "MinionCapsule", 1 },
+        { "MinionCube", 1 },
+        { "MinionCylinder", 1 },
+        { "MinionSphere", 1 },
     };
 
     // Current destruction counts
@@ -53,6 +52,6 @@ public class WinManager : MonoBehaviour
     private void WinLevel()
     {
         Debug.Log("Level Complete! All required objects destroyed.");
-        Object.FindFirstObjectByType<WinScreenManager>()?.ShowWinScreen();
+        SceneManager.LoadScene("WinScene");
     }
 }

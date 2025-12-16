@@ -2,30 +2,17 @@ using UnityEngine;
 
 public class ESC2MainMenu : MonoBehaviour
 {
-    private UIControl uiControl;
-
-    void Start()
-    {
-        // Find the UIControl component in the scene
-        uiControl = FindFirstObjectByType<UIControl>();
-
-        if (uiControl == null)
-        {
-            Debug.LogWarning("UIControl not found in scene!");
-        }
-    }
-
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            if (uiControl != null)
+            if (UIControl.Instance != null)
             {
-                uiControl.PlayAgain();
+                UIControl.Instance.PlayAgain();
             }
             else
             {
-                Debug.LogWarning("ESC pressed but UIControl is missing.");
+                Debug.LogWarning("M pressed but UIControl.Instance is missing.");
             }
         }
     }
