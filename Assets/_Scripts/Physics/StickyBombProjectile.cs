@@ -11,10 +11,10 @@ public class StickyBombProjectile : MonoBehaviour
     public float ringLaunchSpeed = 15f;
 
     [Header("Cooldown Settings")]
-    public static float timeCooldown = 1f;
-    public static int scoreCooldown = 10;
+    public static float timeCooldown = 1f;       // LMB cooldown (seconds)
+    public static int scoreCooldown = 10;        // RMB score requirement
 
-    private SimplePool pool; // bomb pool
+    private SimplePool pool;
     private AudioSource explosionAudio;
     private GameObject targetToDestroy;
     private float t;
@@ -26,12 +26,14 @@ public class StickyBombProjectile : MonoBehaviour
     {
         if (!spawnRing)
         {
+            // Time-based cooldown for LMB
             if (Time.time < lastFireTime + timeCooldown)
                 return false;
         }
         else
         {
-            if (ScoreManager.Instance == null || ScoreManager.Instance.CurrentScore < scoreCooldown)
+            // Check RMB cooldown score
+            if (ScoreManager.Instance == null || ScoreManager.Instance.RmbCooldownScore < scoreCooldown)
                 return false;
         }
 
@@ -42,9 +44,14 @@ public class StickyBombProjectile : MonoBehaviour
         proj.Init(p, spawnRing);
 
         if (!spawnRing)
+        {
             lastFireTime = Time.time;
+        }
         else
-            ScoreManager.Instance.UseScore(scoreCooldown);
+        {
+            // Subtract only from RMB cooldown score, not main score
+            ScoreManager.Instance.UseRmbCooldownScore(scoreCooldown);
+        }
 
         return true;
     }
@@ -99,7 +106,6 @@ public class StickyBombProjectile : MonoBehaviour
 
     void Explode()
     {
-        // Spawn explosion effect from pool
         if (SimplePool.ExplosionPoolInstance != null)
         {
             GameObject effect = SimplePool.ExplosionPoolInstance.Get(transform.position, Quaternion.identity);
@@ -132,7 +138,6 @@ public class StickyBombProjectile : MonoBehaviour
             string type = targetToDestroy.tag;
             GameManager.instance?.ObjectDestroyed(type);
 
-            // Only destroy enemies, never pooled projectiles/effects
             if (!targetToDestroy.TryGetComponent<StickyBombProjectile>(out _))
             {
                 Destroy(targetToDestroy);
@@ -177,7 +182,7 @@ public class StickyBombProjectile : MonoBehaviour
 
             Rigidbody rb = bomb.GetComponent<Rigidbody>();
             if (rb != null)
-                rb.linearVelocity = dir * ringLaunchSpeed; // Unity 6+ API
+                rb.linearVelocity = dir * ringLaunchSpeed;
         }
     }
 }

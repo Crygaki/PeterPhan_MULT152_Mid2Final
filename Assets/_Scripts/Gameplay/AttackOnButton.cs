@@ -6,34 +6,20 @@ using TMPro;
 public class AttackOnButton : MonoBehaviour
 {
     [Header("References")]
-    public SimplePool pool;          // Bomb pool (assign in Inspector)
-    public Transform firePoint;      // Where bombs spawn
+    public SimplePool pool;
+    public Transform firePoint;
 
     [Header("UI - Left Mouse")]
-    public Image cooldownOverlay;    // For LMB time cooldown
-    public Image icon;               // Bomb icon (optional dimming)
+    public Image cooldownOverlay;
+    public Image icon;
 
     [Header("UI - Right Mouse")]
-    public Image ringOverlay;        // Overlay fill for RMB score cooldown
-    public Image ringIcon;           // Separate icon for RMB
-    public TMP_Text ringText;        // Text showing score requirement
+    public Image ringOverlay;
+    public Image ringIcon;
+    public TMP_Text ringText;
 
     private bool shootLeft;
     private bool shootRight;
-
-    // Track last time RMB was fired so we can reset overlay
-    private bool ringJustFired = false;
-
-    // --- Input System Callbacks (Send Messages mode) ---
-    public void OnShoot(InputValue value)   // Left mouse
-    {
-        shootLeft = value.isPressed;
-    }
-
-    public void OnAltShoot(InputValue value) // Right mouse
-    {
-        shootRight = value.isPressed;
-    }
 
     void OnEnable()
     {
@@ -45,6 +31,16 @@ public class AttackOnButton : MonoBehaviour
     {
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.OnScoreChanged.RemoveListener(HandleScoreChanged);
+    }
+
+    public void OnShoot(InputValue value)
+    {
+        shootLeft = value.isPressed;
+    }
+
+    public void OnAltShoot(InputValue value)
+    {
+        shootRight = value.isPressed;
     }
 
     void Update()
@@ -68,14 +64,9 @@ public class AttackOnButton : MonoBehaviour
             if (pool != null && firePoint != null)
             {
                 bool fired = StickyBombProjectile.TrySpawn(pool, firePoint.position, firePoint.rotation, true);
-                if (fired)
+                if (!fired)
                 {
-                    // Reset overlay when ring bomb is fired
-                    ringJustFired = true;
-                }
-                else
-                {
-                    Debug.Log("Not enough score for ring bomb!");
+                    Debug.Log("Not enough RMB cooldown score for ring bomb!");
                 }
             }
             else
@@ -85,8 +76,8 @@ public class AttackOnButton : MonoBehaviour
             shootRight = false;
         }
 
-        UpdateCooldownUI(); // LMB time cooldown
-        UpdateRingUI();     // RMB score cooldown
+        UpdateCooldownUI();
+        UpdateRingUI();
     }
 
     void UpdateCooldownUI()
@@ -106,30 +97,19 @@ public class AttackOnButton : MonoBehaviour
         if (ScoreManager.Instance == null) return;
 
         int currentScore = ScoreManager.Instance.CurrentScore;
+        int cooldownScore = ScoreManager.Instance.RmbCooldownScore; // NEW variable in ScoreManager
         int requiredScore = StickyBombProjectile.scoreCooldown;
 
-        float ratio = Mathf.Clamp01((float)currentScore / requiredScore);
+        float ratio = Mathf.Clamp01((float)cooldownScore / requiredScore);
 
         if (ringOverlay != null)
-        {
-            if (ringJustFired)
-            {
-                // Drain overlay immediately when fired
-                ringOverlay.fillAmount = 0f;
-                ringJustFired = false;
-            }
-            else
-            {
-                // Fill overlay based on score progress
-                ringOverlay.fillAmount = ratio;
-            }
-        }
+            ringOverlay.fillAmount = ratio;
 
         if (ringIcon != null)
-            ringIcon.color = (currentScore >= requiredScore) ? Color.white : Color.red;
+            ringIcon.color = (cooldownScore >= requiredScore) ? Color.white : Color.red;
 
         if (ringText != null)
-            ringText.text = $"Score: {currentScore}/{requiredScore}";
+            ringText.text = $"RMB: {cooldownScore}/{requiredScore}";
     }
 
     void HandleScoreChanged(int newScore)

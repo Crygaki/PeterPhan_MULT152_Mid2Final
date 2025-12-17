@@ -559,7 +559,7 @@ GameObject:
   - component: {fileID: 219818279}
   - component: {fileID: 219818278}
   m_Layer: 5
-  m_Name: P_HighScore
+  m_Name: P_HighRecord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -756,7 +756,7 @@ MonoBehaviour:
   m_fontColorGradient:
     topLeft: {r: 1, g: 0, b: 0, a: 1}
     topRight: {r: 0.1333333, g: 0.5450981, b: 0.1333333, a: 1}
-    bottomLeft: {r: 0, g: 0, b: 0, a: 1}
+    bottomLeft: {r: 0, g: 0, b: 1, a: 1}
     bottomRight: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
@@ -1032,7 +1032,7 @@ GameObject:
   - component: {fileID: 530164319}
   - component: {fileID: 530164318}
   m_Layer: 5
-  m_Name: TMP_HighScore
+  m_Name: TMP_HighRecord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1077,7 +1077,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: High Score
+  m_text: High Record
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1207,7 +1207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1906,7 +1906,7 @@ GameObject:
   - component: {fileID: 993676349}
   - component: {fileID: 993676348}
   m_Layer: 5
-  m_Name: T_ResetScore
+  m_Name: T_ResetRecord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1964,7 +1964,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Reset High Score
+  m_Text: Reset Record
 --- !u!222 &993676349
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3516,7 +3516,7 @@ GameObject:
   - component: {fileID: 2072066592}
   - component: {fileID: 2072066595}
   m_Layer: 5
-  m_Name: B_ResetScore
+  m_Name: B_ResetRecord
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4033,7 +4033,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 481f15ff702bd8d48a1af1f040ce1422, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e4d0f0270e8d97e46a3dfc38780e3c1c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

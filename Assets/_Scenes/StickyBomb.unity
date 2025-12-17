@@ -4926,6 +4926,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4537862740077694668, guid: 319251e487709674d8993b8177b30623, type: 3}
+      propertyPath: m_text
+      value: Record
+      objectReference: {fileID: 0}
     - target: {fileID: 5014750555064442831, guid: 319251e487709674d8993b8177b30623, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -4938,6 +4942,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 8751306753305899556}
+    - target: {fileID: 8726531466861682546, guid: 319251e487709674d8993b8177b30623, type: 3}
+      propertyPath: m_Name
+      value: TMP_Record
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

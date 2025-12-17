@@ -10,6 +10,9 @@ public class ScoreManager : MonoBehaviour
     public int startingScore = 0;
     public int CurrentScore { get; private set; }
 
+    // Scene-only pool for RMB cooldown
+    public int RmbCooldownScore { get; private set; }
+
     [Header("Difficulty Settings")]
     public DifficultyMode currentMode = DifficultyMode.Easy;  // uses shared enum
 
@@ -37,6 +40,7 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         CurrentScore = startingScore;
+        RmbCooldownScore = startingScore; // runtime only, not saved
 
         // Always ensure gameData is valid
         gameData = GameDataManager.Load();
@@ -57,6 +61,8 @@ public class ScoreManager : MonoBehaviour
         int amount = Mathf.RoundToInt(baseAmount * sessionMultiplier);
 
         CurrentScore += amount;
+        RmbCooldownScore += amount; // also increment RMB cooldown pool
+
         UpdateScoreUI();
         OnScoreChanged?.Invoke(CurrentScore);
 
@@ -76,9 +82,22 @@ public class ScoreManager : MonoBehaviour
         return false;
     }
 
+    // Only affects runtime pool, not saved
+    public bool UseRmbCooldownScore(int amount)
+    {
+        if (RmbCooldownScore >= amount)
+        {
+            RmbCooldownScore -= amount;
+            UpdateScoreUI();
+            return true;
+        }
+        return false;
+    }
+
     public void ResetScore()
     {
         CurrentScore = startingScore;
+        RmbCooldownScore = startingScore; // reset runtime pool
         UpdateScoreUI();
         OnScoreChanged?.Invoke(CurrentScore);
     }
@@ -118,7 +137,6 @@ public class ScoreManager : MonoBehaviour
         };
     }
 
-    // Made public so GameManager can call it
     public void UpdateHighScore(int score)
     {
         if (gameData == null) return;
@@ -198,7 +216,7 @@ public class ScoreManager : MonoBehaviour
     private void UpdateScoreUI()
     {
         if (scoreText != null)
-            scoreText.text = $"Score: {CurrentScore}";
+            scoreText.text = $"RMB: {RmbCooldownScore}";
     }
 
     private void SaveGameData()
