@@ -14,7 +14,7 @@ public class ScoreManager : MonoBehaviour
     public int RmbCooldownScore { get; private set; }
 
     [Header("Difficulty Settings")]
-    public DifficultyMode currentMode = DifficultyMode.Easy;  // uses shared enum
+    public DifficultyMode currentMode = DifficultyMode.Easy;
 
     [Header("UI")]
     public TMP_Text scoreText;
@@ -40,19 +40,30 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         CurrentScore = startingScore;
-        RmbCooldownScore = startingScore; // runtime only, not saved
+        RmbCooldownScore = startingScore;
 
-        // Always ensure gameData is valid
         gameData = GameDataManager.Load();
         if (gameData == null)
-        {
-            Debug.LogWarning("GameDataManager.Load() returned null, creating defaults.");
             gameData = new GameData();
-        }
 
-        currentMode = gameData.selectedDifficulty;
+        ApplyDifficultyFromData();
+
         UpdateScoreUI();
         OnScoreChanged?.Invoke(CurrentScore);
+    }
+
+    private void ApplyDifficultyFromData()
+    {
+        if (gameData != null)
+        {
+            currentMode = gameData.selectedDifficulty;
+            Debug.Log("Difficulty applied from GameData: " + currentMode);
+        }
+        else
+        {
+            currentMode = DifficultyMode.Easy;
+            Debug.LogWarning("GameData was null, defaulting to Easy.");
+        }
     }
 
     // --- Score Methods ---
@@ -61,7 +72,7 @@ public class ScoreManager : MonoBehaviour
         int amount = Mathf.RoundToInt(baseAmount * sessionMultiplier);
 
         CurrentScore += amount;
-        RmbCooldownScore += amount; // also increment RMB cooldown pool
+        RmbCooldownScore += amount;
 
         UpdateScoreUI();
         OnScoreChanged?.Invoke(CurrentScore);
@@ -82,7 +93,6 @@ public class ScoreManager : MonoBehaviour
         return false;
     }
 
-    // Only affects runtime pool, not saved
     public bool UseRmbCooldownScore(int amount)
     {
         if (RmbCooldownScore >= amount)
@@ -97,7 +107,7 @@ public class ScoreManager : MonoBehaviour
     public void ResetScore()
     {
         CurrentScore = startingScore;
-        RmbCooldownScore = startingScore; // reset runtime pool
+        RmbCooldownScore = startingScore;
         UpdateScoreUI();
         OnScoreChanged?.Invoke(CurrentScore);
     }
@@ -108,18 +118,11 @@ public class ScoreManager : MonoBehaviour
         currentMode = mode;
 
         if (gameData == null)
-        {
-            Debug.LogWarning("GameData was null in SetDifficulty, loading defaults.");
-            gameData = GameDataManager.Load();
-            if (gameData == null)
-            {
-                Debug.LogWarning("GameDataManager.Load() still returned null, creating defaults.");
-                gameData = new GameData();
-            }
-        }
+            gameData = new GameData();
 
         gameData.selectedDifficulty = mode;
         SaveGameData();
+
         Debug.Log("Difficulty set to: " + mode);
     }
 
@@ -157,7 +160,6 @@ public class ScoreManager : MonoBehaviour
         SaveGameData();
     }
 
-    // --- Best Multiplier Methods ---
     public int GetBestMultiplierForCurrentMode()
     {
         if (gameData == null) return 0;
@@ -190,7 +192,6 @@ public class ScoreManager : MonoBehaviour
         SaveGameData();
     }
 
-    // --- Combined Reset ---
     public void ResetHighScoreAndBestMultiplier()
     {
         if (gameData == null) return;
@@ -216,16 +217,17 @@ public class ScoreManager : MonoBehaviour
     private void UpdateScoreUI()
     {
         if (scoreText != null)
-            scoreText.text = $"RMB: {RmbCooldownScore}";
+        {
+            int bestMultiplier = GetBestMultiplierForCurrentMode();
+            scoreText.text = $"Score: {CurrentScore} | Multiplier: x{bestMultiplier} | Difficulty: {currentMode} | RMB: {RmbCooldownScore}";
+        }
     }
 
     private void SaveGameData()
     {
         if (gameData == null)
-        {
-            Debug.LogWarning("Attempted to save null GameData, creating defaults.");
             gameData = new GameData();
-        }
+
         GameDataManager.Save(gameData);
     }
 }

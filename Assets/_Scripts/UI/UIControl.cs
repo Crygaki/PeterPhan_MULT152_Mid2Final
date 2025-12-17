@@ -38,10 +38,9 @@ public class UIControl : MonoBehaviour
     // --- Scene Management with Fade ---
     public void StartGame()
     {
-        SettingsData settings = SettingsManager.LoadSettings();
-
-        if (ScoreManager.Instance != null)
-            ScoreManager.Instance.SetDifficulty(settings.selectedDifficulty);
+        GameData data = GameDataManager.Load();
+        if (ScoreManager.Instance != null && data != null)
+            ScoreManager.Instance.SetDifficulty(data.selectedDifficulty);
 
         StartCoroutine(FadeAndLoadScene("StickyBomb"));
     }

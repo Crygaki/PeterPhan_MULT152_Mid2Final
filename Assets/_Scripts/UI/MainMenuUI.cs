@@ -29,6 +29,7 @@ public class MainMenuUI : MonoBehaviour
 
             // Set dropdown to saved difficulty
             difficultyDropdown.value = (int)gameData.selectedDifficulty;
+            difficultyDropdown.RefreshShownValue();
 
             // Delay initialization until ScoreManager is ready
             StartCoroutine(InitializeDifficultyDropdown());
@@ -43,8 +44,12 @@ public class MainMenuUI : MonoBehaviour
         while (ScoreManager.Instance == null)
             yield return null;
 
-        // Now safe to call
-        OnDifficultyChanged(difficultyDropdown.value);
+        // Apply saved difficulty to ScoreManager immediately
+        DifficultyMode savedMode = (DifficultyMode)difficultyDropdown.value;
+        ScoreManager.Instance.SetDifficulty(savedMode);
+        UpdateDifficultyLabel(savedMode.ToString(), GetColorForMode(savedMode));
+
+        // Subscribe to dropdown changes
         difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
 
         // Subscribe to score changes
@@ -85,22 +90,8 @@ public class MainMenuUI : MonoBehaviour
         if (ScoreManager.Instance == null) return;
 
         DifficultyMode mode = (DifficultyMode)index;
-
-        switch (mode)
-        {
-            case DifficultyMode.Easy:
-                ScoreManager.Instance.SetDifficulty(DifficultyMode.Easy);
-                UpdateDifficultyLabel("Easy", Color.green);
-                break;
-            case DifficultyMode.Hard:
-                ScoreManager.Instance.SetDifficulty(DifficultyMode.Hard);
-                UpdateDifficultyLabel("Hard", Color.yellow);
-                break;
-            case DifficultyMode.Extreme:
-                ScoreManager.Instance.SetDifficulty(DifficultyMode.Extreme);
-                UpdateDifficultyLabel("Extreme", Color.red);
-                break;
-        }
+        ScoreManager.Instance.SetDifficulty(mode);
+        UpdateDifficultyLabel(mode.ToString(), GetColorForMode(mode));
 
         if (gameData == null)
         {
@@ -108,6 +99,7 @@ public class MainMenuUI : MonoBehaviour
             gameData = new GameData();
         }
 
+        // Save selected difficulty so it persists when returning to menu
         gameData.selectedDifficulty = mode;
         GameDataManager.Save(gameData);
 
@@ -120,6 +112,17 @@ public class MainMenuUI : MonoBehaviour
         {
             difficultyLabel.text = "Difficulty: " + modeName;
             difficultyLabel.color = color;
+        }
+    }
+
+    private Color GetColorForMode(DifficultyMode mode)
+    {
+        switch (mode)
+        {
+            case DifficultyMode.Easy: return Color.green;
+            case DifficultyMode.Hard: return Color.yellow;
+            case DifficultyMode.Extreme: return Color.red;
+            default: return Color.white;
         }
     }
 

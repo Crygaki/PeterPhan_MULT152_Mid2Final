@@ -60,7 +60,23 @@ public class GameManager : MonoBehaviour
             gameData = new GameData();
         }
 
-        currentDifficulty = gameData.selectedDifficulty;
+        // Always use ScoreManager’s difficulty if available
+        if (ScoreManager.Instance != null)
+        {
+            currentDifficulty = ScoreManager.Instance.currentMode;
+        }
+        else
+        {
+            currentDifficulty = gameData.selectedDifficulty;
+        }
+
+        // Force ScoreManager to match GameManager difficulty
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.SetDifficulty(currentDifficulty);
+        }
+
+        Debug.Log("GameManager difficulty set to: " + currentDifficulty);
 
         // Reset score and multiplier at the start of each run
         multiplier = 1;
@@ -116,12 +132,16 @@ public class GameManager : MonoBehaviour
     void UpdateUI()
     {
         if (scoreText != null && ScoreManager.Instance != null)
-            scoreText.text = $"Score: {ScoreManager.Instance.CurrentScore} (x{multiplier})";
+        {
+            scoreText.text =
+                $"Score: {ScoreManager.Instance.CurrentScore} (x{multiplier}) | Difficulty: {currentDifficulty}";
+        }
 
         if (progressText != null)
         {
             int requirement = requirements[currentDifficulty];
             progressText.text =
+                $"Current Difficulty: {currentDifficulty}\n" +
                 $"Boss: {destroyedCounts["Boss"]}/{requirement}\n" +
                 $"Capsule: {destroyedCounts["MinionCapsule"]}/{requirement}\n" +
                 $"Cube: {destroyedCounts["MinionCube"]}/{requirement}\n" +
