@@ -14,6 +14,9 @@ public class UIControl : MonoBehaviour
     [SerializeField] private TMP_Text loadingText;        // "Loading..." text
     [SerializeField] private Image loadingSpinner;        // spinner image
 
+    [Header("Information Panel")]
+    [SerializeField] private GameObject informationCanvas; // assign via Inspector
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -33,6 +36,9 @@ public class UIControl : MonoBehaviour
 
         if (loadingSpinner != null)
             loadingSpinner.gameObject.SetActive(false);
+
+        if (informationCanvas != null)
+            informationCanvas.SetActive(false); // start hidden by default
     }
 
     // --- Scene Management with Fade ---
@@ -60,6 +66,20 @@ public class UIControl : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    // --- Toggle Information Canvas ---
+    public void ToggleInformation()
+    {
+        if (informationCanvas != null)
+        {
+            bool isActive = informationCanvas.activeSelf;
+            informationCanvas.SetActive(!isActive);
+        }
+        else
+        {
+            Debug.LogWarning("Information Canvas not assigned in Inspector!");
+        }
     }
 
     // --- Fade Coroutine with Loading UI ---
