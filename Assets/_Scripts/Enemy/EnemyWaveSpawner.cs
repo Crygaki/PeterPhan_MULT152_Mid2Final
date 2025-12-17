@@ -14,7 +14,7 @@ public class EnemyWaveSpawner : MonoBehaviour
     [Header("Waves")]
     [Min(1)] public int initialSpawnAmount = 5;   // how many to spawn in wave 1
     [Min(0)] public int addPerWave = 2;           // how much to add each wave
-    [Min(1)] public int maxAlive = 25;            // cap simultaneous enemies (updated to 25)
+    [Min(1)] public int maxAlive = 50;            // cap simultaneous enemies (updated to 50)
     [Min(0f)] public float spawnInterval = 0.35f; // delay between individual spawns
     [Min(0f)] public float timeBetweenWaves = 2f; // delay after a wave is cleared
 
@@ -72,7 +72,7 @@ public class EnemyWaveSpawner : MonoBehaviour
             spawning = true;
             while (spawnedThisWave < targetThisWave)
             {
-                // respect maxAlive cap (now 25)
+                // respect maxAlive cap (now 50)
                 while (aliveCount >= maxAlive) yield return null;
 
                 SpawnOne();

@@ -11,7 +11,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform[] spawnPoints;
 
     [Header("Spawn Settings")]
-    [Min(1)] public int maxAlive = 10;            // cap simultaneous enemies
+    [Min(1)] public int maxAlive = 5;            // cap simultaneous enemies
     [Min(0f)] public float spawnInterval = 2f;    // seconds between spawns
     public bool spawnOnStart = true;
 

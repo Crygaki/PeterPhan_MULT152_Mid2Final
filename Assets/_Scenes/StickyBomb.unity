@@ -1493,7 +1493,7 @@ MonoBehaviour:
   spawnPoints: []
   initialSpawnAmount: 5
   addPerWave: 3
-  maxAlive: 40
+  maxAlive: 15
   spawnInterval: 0.35
   timeBetweenWaves: 2
   autoStart: 1
@@ -1514,9 +1514,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 3367801043851315927, guid: a8c914e7f7d737f4e9e87b83b7eab19e, type: 3}
   spawnPoints: []
-  spawnAmount: 1
+  maxAlive: 2
   spawnInterval: 5
-  maxAlive: 20
   spawnOnStart: 1
 --- !u!114 &352800886 stripped
 MonoBehaviour:
@@ -2130,7 +2129,7 @@ MonoBehaviour:
   spawnPoints: []
   initialSpawnAmount: 5
   addPerWave: 3
-  maxAlive: 40
+  maxAlive: 15
   spawnInterval: 0.35
   timeBetweenWaves: 2
   autoStart: 1
@@ -2151,9 +2150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 3367801043851315927, guid: a8c914e7f7d737f4e9e87b83b7eab19e, type: 3}
   spawnPoints: []
-  spawnAmount: 1
+  maxAlive: 2
   spawnInterval: 5
-  maxAlive: 20
   spawnOnStart: 1
 --- !u!1001 &707145175
 PrefabInstance:
@@ -2731,7 +2729,7 @@ MonoBehaviour:
   spawnPoints: []
   initialSpawnAmount: 5
   addPerWave: 3
-  maxAlive: 40
+  maxAlive: 15
   spawnInterval: 0.35
   timeBetweenWaves: 2
   autoStart: 1
@@ -2752,9 +2750,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 3367801043851315927, guid: a8c914e7f7d737f4e9e87b83b7eab19e, type: 3}
   spawnPoints: []
-  spawnAmount: 1
+  maxAlive: 2
   spawnInterval: 5
-  maxAlive: 20
   spawnOnStart: 1
 --- !u!1001 &907817630
 PrefabInstance:
@@ -6322,7 +6319,7 @@ MonoBehaviour:
   spawnPoints: []
   initialSpawnAmount: 5
   addPerWave: 3
-  maxAlive: 40
+  maxAlive: 15
   spawnInterval: 0.35
   timeBetweenWaves: 2
   autoStart: 1
@@ -6343,9 +6340,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 3367801043851315927, guid: a8c914e7f7d737f4e9e87b83b7eab19e, type: 3}
   spawnPoints: []
-  spawnAmount: 1
+  maxAlive: 2
   spawnInterval: 5
-  maxAlive: 20
   spawnOnStart: 1
 --- !u!1001 &2100901536
 PrefabInstance:
