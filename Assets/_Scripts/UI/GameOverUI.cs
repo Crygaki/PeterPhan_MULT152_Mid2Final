@@ -21,21 +21,31 @@ public class GameOverUI : MonoBehaviour
     {
         if (ScoreManager.Instance == null) return;
 
-        // Pull final score and multiplier directly from ScoreManager
+        // Final score and session multiplier
         int finalScore = ScoreManager.Instance.CurrentScore;
-        int finalMultiplier = ScoreManager.Instance.GetMultiplierForCurrentMode();
+        int finalMultiplier = GameManager.instance != null ? GameManager.instance.GetSessionMultiplier() : 1;
+
+        // Best multiplier record
+        int bestMultiplier = ScoreManager.Instance.GetBestMultiplierForCurrentMode();
 
         if (finalResultText != null)
-            finalResultText.text = "Final Score: " + finalScore.ToString("#,0") +
-                                   "\nScore Multiplier: x" + finalMultiplier;
+        {
+            finalResultText.text =
+                "Final Score: " + finalScore.ToString("#,0") +
+                "\nSession Multiplier: x" + finalMultiplier +
+                "\nBest Multiplier: x" + bestMultiplier;
+        }
 
+        // High score record
         int hs = ScoreManager.Instance.GetHighScoreForCurrentMode();
-        int bestMultiplier = ScoreManager.Instance.GetMultiplierForCurrentMode();
 
         if (highScoreText != null)
-            highScoreText.text = "High Score (" + ScoreManager.Instance.currentMode + "): " +
-                                 hs.ToString("#,0") +
-                                 "\nBest Multiplier: x" + bestMultiplier;
+        {
+            highScoreText.text =
+                "High Score (" + ScoreManager.Instance.currentMode + "): " +
+                hs.ToString("#,0") +
+                "\nBest Multiplier: x" + bestMultiplier;
+        }
 
         // Check if new records were set
         bool isNewScore = finalScore >= hs;

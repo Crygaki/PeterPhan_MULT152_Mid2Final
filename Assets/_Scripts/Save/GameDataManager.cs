@@ -75,9 +75,9 @@ public static class GameDataManager
             highScoreEasy = 0,
             highScoreHard = 0,
             highScoreExtreme = 0,
-            multiplierEasy = 0,
-            multiplierHard = 0,
-            multiplierExtreme = 0
+            bestMultiplierEasy = 0,
+            bestMultiplierHard = 0,
+            bestMultiplierExtreme = 0
         };
     }
 }

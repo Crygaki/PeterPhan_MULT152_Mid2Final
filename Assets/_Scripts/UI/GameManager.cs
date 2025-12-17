@@ -10,9 +10,10 @@ public class GameManager : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text progressText;
 
+    // Session-only multiplier
     private int multiplier = 1;
 
-    // Requirements per difficulty (enum keys instead of strings)
+    // Requirements per difficulty
     private Dictionary<DifficultyMode, int> requirements = new Dictionary<DifficultyMode, int>()
     {
         {DifficultyMode.Easy, 5},
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour
     };
 
     private DifficultyMode currentDifficulty = DifficultyMode.Easy;
+    private GameData gameData;
 
     void Awake()
     {
@@ -50,9 +52,15 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Load difficulty from JSON settings
-        SettingsData settings = SettingsManager.LoadSettings();
-        currentDifficulty = settings.selectedDifficulty;
+        // Load difficulty from GameData JSON
+        gameData = GameDataManager.Load();
+        if (gameData == null)
+        {
+            Debug.LogWarning("GameDataManager.Load() returned null, creating defaults.");
+            gameData = new GameData();
+        }
+
+        currentDifficulty = gameData.selectedDifficulty;
 
         // Reset score and multiplier at the start of each run
         multiplier = 1;
@@ -70,7 +78,7 @@ public class GameManager : MonoBehaviour
         // Add score through ScoreManager (with multiplier applied)
         int gained = points[objectType] * multiplier;
         if (ScoreManager.Instance != null)
-            ScoreManager.Instance.AddScore(gained);
+            ScoreManager.Instance.AddScore(gained, multiplier);
 
         destroyedCounts[objectType]++;
 
@@ -78,7 +86,7 @@ public class GameManager : MonoBehaviour
         {
             multiplier++;
             if (ScoreManager.Instance != null)
-                ScoreManager.Instance.UpdateMultiplier(multiplier);
+                ScoreManager.Instance.UpdateBestMultiplier(multiplier);
 
             ResetCounts();
         }
@@ -120,5 +128,26 @@ public class GameManager : MonoBehaviour
                 $"Cylinder: {destroyedCounts["MinionCylinder"]}/{requirement}\n" +
                 $"Sphere: {destroyedCounts["MinionSphere"]}/{requirement}";
         }
+    }
+
+    // --- Called when the run ends (player dies, level complete, etc.)
+    public void EndGame()
+    {
+        if (ScoreManager.Instance != null)
+        {
+            // Save best multiplier record
+            ScoreManager.Instance.UpdateBestMultiplier(multiplier);
+
+            // Save high score at end of run
+            ScoreManager.Instance.UpdateHighScore(ScoreManager.Instance.CurrentScore);
+        }
+
+        Debug.Log("Game ended. Best multiplier and high score updated.");
+    }
+
+    // --- Expose session multiplier for UI (e.g., GameOverUI)
+    public int GetSessionMultiplier()
+    {
+        return multiplier;
     }
 }

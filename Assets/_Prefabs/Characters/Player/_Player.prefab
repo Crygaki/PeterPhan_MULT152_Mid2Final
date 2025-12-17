@@ -477,6 +477,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: fae7cf6f-5040-49a8-9f90-1b2bf9ac7859
     m_ActionName: 'Player/Reload[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 74fc1aaa-8a8e-4b13-b17f-b06871124d8a
+    m_ActionName: 'Player/AltShoot[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -550,6 +554,9 @@ MonoBehaviour:
   firePoint: {fileID: 5247644256914959656}
   cooldownOverlay: {fileID: 0}
   icon: {fileID: 0}
+  ringOverlay: {fileID: 0}
+  ringIcon: {fileID: 0}
+  ringText: {fileID: 0}
 --- !u!114 &370795067105913233
 MonoBehaviour:
   m_ObjectHideFlags: 0

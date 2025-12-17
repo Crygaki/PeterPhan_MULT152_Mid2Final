@@ -1958,7 +1958,6 @@ GameObject:
   - component: {fileID: 651947978}
   - component: {fileID: 651947983}
   - component: {fileID: 651947980}
-  - component: {fileID: 651947979}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1981,22 +1980,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 256346207}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &651947979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 651947977}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1882458c4fadac84e95e4c267913605b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIControl
-  fadeCanvasGroup: {fileID: 0}
-  fadeDuration: 1
-  loadingText: {fileID: 0}
-  loadingSpinner: {fileID: 0}
 --- !u!114 &651947980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4855,6 +4838,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1270304720145239687, guid: 319251e487709674d8993b8177b30623, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1716531259386bc4c8eb3f7d7e828f37, type: 3}
     - target: {fileID: 3315645364696522207, guid: 319251e487709674d8993b8177b30623, type: 3}
       propertyPath: m_Name
       value: Player_Canvas
@@ -4939,6 +4926,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5014750555064442831, guid: 319251e487709674d8993b8177b30623, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 41f9bbb149eddcc42bc283f7ed25b69e, type: 3}
     - target: {fileID: 5684075023466309920, guid: 319251e487709674d8993b8177b30623, type: 3}
       propertyPath: player
       value: 
@@ -7375,22 +7366,6 @@ PrefabInstance:
     - target: {fileID: 2891274435510444387, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3080175011918772357, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: m_NotificationBehavior
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3080175011918772357, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3080175011918772357, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: m_ActionEvents.Array.data[6].m_ActionId
-      value: 74fc1aaa-8a8e-4b13-b17f-b06871124d8a
-      objectReference: {fileID: 0}
-    - target: {fileID: 3080175011918772357, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: m_ActionEvents.Array.data[6].m_ActionName
-      value: 'Player/AltShoot[/Mouse/rightButton]'
       objectReference: {fileID: 0}
     - target: {fileID: 6318577109456146364, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
       propertyPath: m_Name

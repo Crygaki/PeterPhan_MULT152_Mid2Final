@@ -92,11 +92,15 @@ public class UIControl : MonoBehaviour
 
     private IEnumerator Fade(float targetAlpha)
     {
+        if (fadeCanvasGroup == null) yield break;
+
         float startAlpha = fadeCanvasGroup.alpha;
         float elapsed = 0f;
 
         while (elapsed < fadeDuration)
         {
+            if (fadeCanvasGroup == null) yield break; // stop if destroyed
+
             elapsed += Time.deltaTime;
             fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed / fadeDuration);
 
@@ -107,6 +111,7 @@ public class UIControl : MonoBehaviour
             yield return null;
         }
 
-        fadeCanvasGroup.alpha = targetAlpha;
+        if (fadeCanvasGroup != null)
+            fadeCanvasGroup.alpha = targetAlpha;
     }
 }

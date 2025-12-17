@@ -62,11 +62,11 @@ public class MainMenuUI : MonoBehaviour
         if (ScoreManager.Instance != null && highScoreText != null)
         {
             int hs = ScoreManager.Instance.GetHighScoreForCurrentMode();
-            int multiplier = ScoreManager.Instance.GetMultiplierForCurrentMode();
+            int bestMultiplier = ScoreManager.Instance.GetBestMultiplierForCurrentMode();
 
             highScoreText.text = "High Score (" + ScoreManager.Instance.currentMode + "): " +
                                  hs.ToString("#,0") +
-                                 "\nBest Multiplier: x" + multiplier;
+                                 "\nBest Multiplier: x" + bestMultiplier;
         }
     }
 
@@ -75,7 +75,7 @@ public class MainMenuUI : MonoBehaviour
     {
         if (ScoreManager.Instance != null)
         {
-            ScoreManager.Instance.ResetHighScoreAndMultiplier();
+            ScoreManager.Instance.ResetHighScoreAndBestMultiplier();
             ShowHighScore();
         }
     }

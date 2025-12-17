@@ -1,7 +1,7 @@
 [System.Serializable]
 public class GameData
 {
-    public int dataVersion = 1; // increment when you change the schema
+    public int dataVersion = 1; // increment when schema changes
 
     public DifficultyMode selectedDifficulty;
 
@@ -10,8 +10,8 @@ public class GameData
     public int highScoreHard;
     public int highScoreExtreme;
 
-    // Score multipliers (earned by player)
-    public int multiplierEasy;
-    public int multiplierHard;
-    public int multiplierExtreme;
+    // Best multipliers (all-time record, not session)
+    public int bestMultiplierEasy;
+    public int bestMultiplierHard;
+    public int bestMultiplierExtreme;
 }

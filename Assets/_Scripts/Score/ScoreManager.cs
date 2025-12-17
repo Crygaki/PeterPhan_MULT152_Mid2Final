@@ -52,10 +52,9 @@ public class ScoreManager : MonoBehaviour
     }
 
     // --- Score Methods ---
-    public void AddScore(int baseAmount)
+    public void AddScore(int baseAmount, int sessionMultiplier = 1)
     {
-        float multiplier = GetMultiplierForCurrentMode();
-        int amount = Mathf.RoundToInt(baseAmount * multiplier);
+        int amount = Mathf.RoundToInt(baseAmount * sessionMultiplier);
 
         CurrentScore += amount;
         UpdateScoreUI();
@@ -91,8 +90,13 @@ public class ScoreManager : MonoBehaviour
 
         if (gameData == null)
         {
-            Debug.LogWarning("GameData was null in SetDifficulty, creating defaults.");
-            gameData = new GameData();
+            Debug.LogWarning("GameData was null in SetDifficulty, loading defaults.");
+            gameData = GameDataManager.Load();
+            if (gameData == null)
+            {
+                Debug.LogWarning("GameDataManager.Load() still returned null, creating defaults.");
+                gameData = new GameData();
+            }
         }
 
         gameData.selectedDifficulty = mode;
@@ -114,7 +118,8 @@ public class ScoreManager : MonoBehaviour
         };
     }
 
-    private void UpdateHighScore(int score)
+    // Made public so GameManager can call it
+    public void UpdateHighScore(int score)
     {
         if (gameData == null) return;
 
@@ -130,43 +135,45 @@ public class ScoreManager : MonoBehaviour
                 if (score > gameData.highScoreExtreme) gameData.highScoreExtreme = score;
                 break;
         }
+
+        SaveGameData();
     }
 
-    // --- Multiplier Methods ---
-    public int GetMultiplierForCurrentMode()
+    // --- Best Multiplier Methods ---
+    public int GetBestMultiplierForCurrentMode()
     {
-        if (gameData == null) return 1;
+        if (gameData == null) return 0;
 
         return currentMode switch
         {
-            DifficultyMode.Easy => gameData.multiplierEasy,
-            DifficultyMode.Hard => gameData.multiplierHard,
-            DifficultyMode.Extreme => gameData.multiplierExtreme,
-            _ => 1
+            DifficultyMode.Easy => gameData.bestMultiplierEasy,
+            DifficultyMode.Hard => gameData.bestMultiplierHard,
+            DifficultyMode.Extreme => gameData.bestMultiplierExtreme,
+            _ => 0
         };
     }
 
-    public void UpdateMultiplier(int multiplier)
+    public void UpdateBestMultiplier(int sessionMultiplier)
     {
         if (gameData == null) return;
 
         switch (currentMode)
         {
             case DifficultyMode.Easy:
-                if (multiplier > gameData.multiplierEasy) gameData.multiplierEasy = multiplier;
+                if (sessionMultiplier > gameData.bestMultiplierEasy) gameData.bestMultiplierEasy = sessionMultiplier;
                 break;
             case DifficultyMode.Hard:
-                if (multiplier > gameData.multiplierHard) gameData.multiplierHard = multiplier;
+                if (sessionMultiplier > gameData.bestMultiplierHard) gameData.bestMultiplierHard = sessionMultiplier;
                 break;
             case DifficultyMode.Extreme:
-                if (multiplier > gameData.multiplierExtreme) gameData.multiplierExtreme = multiplier;
+                if (sessionMultiplier > gameData.bestMultiplierExtreme) gameData.bestMultiplierExtreme = sessionMultiplier;
                 break;
         }
         SaveGameData();
     }
 
     // --- Combined Reset ---
-    public void ResetHighScoreAndMultiplier()
+    public void ResetHighScoreAndBestMultiplier()
     {
         if (gameData == null) return;
 
@@ -174,15 +181,15 @@ public class ScoreManager : MonoBehaviour
         {
             case DifficultyMode.Easy:
                 gameData.highScoreEasy = 0;
-                gameData.multiplierEasy = 0;
+                gameData.bestMultiplierEasy = 0;
                 break;
             case DifficultyMode.Hard:
                 gameData.highScoreHard = 0;
-                gameData.multiplierHard = 0;
+                gameData.bestMultiplierHard = 0;
                 break;
             case DifficultyMode.Extreme:
                 gameData.highScoreExtreme = 0;
-                gameData.multiplierExtreme = 0;
+                gameData.bestMultiplierExtreme = 0;
                 break;
         }
         SaveGameData();
