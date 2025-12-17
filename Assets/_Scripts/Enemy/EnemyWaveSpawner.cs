@@ -14,7 +14,7 @@ public class EnemyWaveSpawner : MonoBehaviour
     [Header("Waves")]
     [Min(1)] public int initialSpawnAmount = 5;   // how many to spawn in wave 1
     [Min(0)] public int addPerWave = 2;           // how much to add each wave
-    [Min(1)] public int maxAlive = 10;            // cap simultaneous enemies
+    [Min(1)] public int maxAlive = 25;            // cap simultaneous enemies (updated to 25)
     [Min(0f)] public float spawnInterval = 0.35f; // delay between individual spawns
     [Min(0f)] public float timeBetweenWaves = 2f; // delay after a wave is cleared
 
@@ -28,8 +28,8 @@ public class EnemyWaveSpawner : MonoBehaviour
     int aliveCount = 0;
     int spawnedThisWave = 0;
     int targetThisWave = 0;
-    
-     [Header("Spawn")]
+
+    [Header("Spawn")]
     public bool spawning = false;
 
     Coroutine waveRoutine;
@@ -60,23 +60,19 @@ public class EnemyWaveSpawner : MonoBehaviour
 
         while (true)
         {
-            // Stop if we're in finite mode and already ran required waves
             if (!infiniteWaves && currentWaveIndex >= totalWaves)
                 break;
 
-            // Set target size for this wave
             targetThisWave = initialSpawnAmount + addPerWave * currentWaveIndex;
             spawnedThisWave = 0;
 
-            // Small pre-wave buffer
             if (currentWaveIndex > 0 && timeBetweenWaves > 0f)
                 yield return new WaitForSeconds(timeBetweenWaves);
 
-            // Spawn the wave
             spawning = true;
             while (spawnedThisWave < targetThisWave)
             {
-                // respect maxAlive cap
+                // respect maxAlive cap (now 25)
                 while (aliveCount >= maxAlive) yield return null;
 
                 SpawnOne();
@@ -87,7 +83,6 @@ public class EnemyWaveSpawner : MonoBehaviour
             }
             spawning = false;
 
-            // Wait until all spawned enemies in this wave are dead
             while (aliveCount > 0)
                 yield return null;
 
@@ -103,23 +98,19 @@ public class EnemyWaveSpawner : MonoBehaviour
         Transform point = ChooseSpawnPoint();
         GameObject go = Instantiate(enemyPrefab, point.position, point.rotation);
 
-        // Wire up death tracking via HealthComponent
         var hc = go.GetComponentInChildren<HealthComponent>();
         if (hc != null)
         {
             aliveCount++;
 
-            // Capture local handler so we can remove it safely
             System.Action handler = null;
             handler = () =>
             {
                 aliveCount = Mathf.Max(0, aliveCount - 1);
-                // Unsubscribe and drop reference
                 if (hc != null) hc.OnDied -= handler;
                 deathHandlers.Remove(hc);
             };
 
-            // subscribe
             hc.OnDied += handler;
             deathHandlers[hc] = handler;
         }
@@ -139,7 +130,6 @@ public class EnemyWaveSpawner : MonoBehaviour
 
     void OnDisable()
     {
-        // Defensive: clean up any remaining subscriptions (e.g., if spawner is disabled during combat)
         foreach (var kvp in deathHandlers)
         {
             if (kvp.Key != null) kvp.Key.OnDied -= kvp.Value;
@@ -147,14 +137,12 @@ public class EnemyWaveSpawner : MonoBehaviour
         deathHandlers.Clear();
     }
 
-    // Optional: quick accessors
     public int CurrentWaveNumber => currentWaveIndex + 1;
     public int AliveCount => aliveCount;
 
     [ContextMenu("Force Next Wave")]
     public void ForceNextWave()
     {
-        // nukes alive count so the loop advances
         aliveCount = 0;
     }
 }

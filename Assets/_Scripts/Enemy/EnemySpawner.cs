@@ -4,33 +4,28 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Prefab & Spawn Points")]
-    [Tooltip("Enemy prefab that includes HealthComponent, visuals, colliders, etc.")]
+    [Tooltip("Enemy prefab from project assets (not in scene hierarchy).")]
     public GameObject enemyPrefab;
 
     [Tooltip("If empty, spawns at this spawner's transform.")]
     public Transform[] spawnPoints;
 
-    [Header("Wave Settings")]
-    [Min(1)] public int spawnAmount = 5;       // how many per wave (Inspector-exposed, as requested) 
-    [Min(0f)] public float spawnInterval = 0.5f;
-    [Tooltip("Max number of enemies alive at once. New spawns wait until below this.")]
-    [Min(1)] public int maxAlive = 10;
-
-    [Header("Auto Start")]
+    [Header("Spawn Settings")]
+    [Min(1)] public int maxAlive = 10;            // cap simultaneous enemies
+    [Min(0f)] public float spawnInterval = 2f;    // seconds between spawns
     public bool spawnOnStart = true;
 
-    // Runtime tracking 
+    // Runtime tracking
     private int aliveCount = 0;
     private Coroutine spawnRoutine;
 
     void Start()
     {
-        if (spawnOnStart) StartWave();
+        if (spawnOnStart) StartSpawning();
     }
 
-    [ContextMenu("Start Wave")]
-
-    public void StartWave()
+    [ContextMenu("Start Spawning")]
+    public void StartSpawning()
     {
         if (enemyPrefab == null)
         {
@@ -39,26 +34,21 @@ public class EnemySpawner : MonoBehaviour
         }
 
         if (spawnRoutine == null)
-            spawnRoutine = StartCoroutine(SpawnWave());
+            spawnRoutine = StartCoroutine(SpawnLoop());
     }
 
-    private IEnumerator SpawnWave()
+    private IEnumerator SpawnLoop()
     {
-        for (int i = 0; i < spawnAmount; i++)
+        while (true)
         {
-            // Respect maxAlive 
-            while (aliveCount >= maxAlive)
-                yield return null;
+            // Only spawn if under maxAlive
+            if (aliveCount < maxAlive)
+            {
+                SpawnOne();
+            }
 
-
-
-            SpawnOne();
-            if (spawnInterval > 0f)
-                yield return new WaitForSeconds(spawnInterval);
+            yield return new WaitForSeconds(spawnInterval);
         }
-
-        spawnRoutine = null;
-
     }
 
     private void SpawnOne()
@@ -66,9 +56,8 @@ public class EnemySpawner : MonoBehaviour
         Transform point = ChooseSpawnPoint();
         GameObject go = Instantiate(enemyPrefab, point.position, point.rotation);
 
-        // Wire health death event so we keep accurate alive counts 
+        // Wire health death event so we keep accurate alive counts
         var hc = go.GetComponentInChildren<HealthComponent>();
-
         if (hc != null)
         {
             aliveCount++;
@@ -76,11 +65,10 @@ public class EnemySpawner : MonoBehaviour
             void OnDiedHandler()
             {
                 aliveCount = Mathf.Max(0, aliveCount - 1);
-                hc.OnDied -= OnDiedHandler; // clean up 
+                hc.OnDied -= OnDiedHandler; // clean up
             }
             hc.OnDied += OnDiedHandler;
         }
-
         else
         {
             Debug.LogWarning("[EnemySpawner] Spawned enemy has no HealthComponent; alive count won't track.", go);
@@ -94,6 +82,6 @@ public class EnemySpawner : MonoBehaviour
         return spawnPoints[idx] ? spawnPoints[idx] : transform;
     }
 
-    // Optional: expose alive count 
+    // Optional: expose alive count
     public int AliveCount => aliveCount;
 }
