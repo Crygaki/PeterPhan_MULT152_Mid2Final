@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class MainMenuUI : MonoBehaviour
 {
@@ -7,11 +8,17 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private TMP_Dropdown difficultyDropdown;
     [SerializeField] private TMP_Text difficultyLabel;
 
-    private SettingsData settings;
+    private GameData gameData;
 
     void Start()
     {
-        settings = SettingsManager.LoadSettings();
+        // Always ensure gameData is valid
+        gameData = GameDataManager.Load();
+        if (gameData == null)
+        {
+            Debug.LogWarning("GameDataManager.Load() returned null, creating defaults.");
+            gameData = new GameData();
+        }
 
         if (difficultyDropdown != null)
         {
@@ -20,14 +27,34 @@ public class MainMenuUI : MonoBehaviour
             difficultyDropdown.options.Add(new TMP_Dropdown.OptionData("Hard"));
             difficultyDropdown.options.Add(new TMP_Dropdown.OptionData("Extreme"));
 
-            // Set dropdown value based on enum
-            difficultyDropdown.value = (int)settings.selectedDifficulty;
-            OnDifficultyChanged(difficultyDropdown.value);
+            // Set dropdown to saved difficulty
+            difficultyDropdown.value = (int)gameData.selectedDifficulty;
 
-            difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
+            // Delay initialization until ScoreManager is ready
+            StartCoroutine(InitializeDifficultyDropdown());
         }
 
         ShowHighScore();
+    }
+
+    private IEnumerator InitializeDifficultyDropdown()
+    {
+        // Wait until ScoreManager.Instance is available
+        while (ScoreManager.Instance == null)
+            yield return null;
+
+        // Now safe to call
+        OnDifficultyChanged(difficultyDropdown.value);
+        difficultyDropdown.onValueChanged.AddListener(OnDifficultyChanged);
+
+        // Subscribe to score changes
+        ScoreManager.Instance.OnScoreChanged.AddListener(HandleScoreChanged);
+    }
+
+    void OnDestroy()
+    {
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.OnScoreChanged.RemoveListener(HandleScoreChanged);
     }
 
     public void ShowHighScore()
@@ -35,19 +62,20 @@ public class MainMenuUI : MonoBehaviour
         if (ScoreManager.Instance != null && highScoreText != null)
         {
             int hs = ScoreManager.Instance.GetHighScoreForCurrentMode();
-            int hl = ScoreManager.Instance.GetHighScoreLevelForCurrentMode();
+            int multiplier = ScoreManager.Instance.GetMultiplierForCurrentMode();
 
             highScoreText.text = "High Score (" + ScoreManager.Instance.currentMode + "): " +
                                  hs.ToString("#,0") +
-                                 "\nLevel Reached: " + hl;
+                                 "\nBest Multiplier: x" + multiplier;
         }
     }
 
-    public void ResetHighScoreButton()
+    // --- Combined Reset Button ---
+    public void ResetHighScoreAndMultiplierButton()
     {
         if (ScoreManager.Instance != null)
         {
-            ScoreManager.Instance.ResetHighScore();
+            ScoreManager.Instance.ResetHighScoreAndMultiplier();
             ShowHighScore();
         }
     }
@@ -74,9 +102,14 @@ public class MainMenuUI : MonoBehaviour
                 break;
         }
 
-        // Save enum directly
-        settings.selectedDifficulty = mode;
-        SettingsManager.SaveSettings(settings);
+        if (gameData == null)
+        {
+            Debug.LogWarning("GameData was null in OnDifficultyChanged, creating defaults.");
+            gameData = new GameData();
+        }
+
+        gameData.selectedDifficulty = mode;
+        GameDataManager.Save(gameData);
 
         ShowHighScore();
     }
@@ -88,5 +121,10 @@ public class MainMenuUI : MonoBehaviour
             difficultyLabel.text = "Difficulty: " + modeName;
             difficultyLabel.color = color;
         }
+    }
+
+    private void HandleScoreChanged(int newScore)
+    {
+        ShowHighScore();
     }
 }

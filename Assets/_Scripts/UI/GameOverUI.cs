@@ -21,31 +21,37 @@ public class GameOverUI : MonoBehaviour
     {
         if (ScoreManager.Instance == null) return;
 
-        int finalScore = PlayerPrefs.GetInt("FinalScore", 0);
-        int finalLevel = PlayerPrefs.GetInt("FinalLevel", 1);
+        // Pull final score and multiplier directly from ScoreManager
+        int finalScore = ScoreManager.Instance.CurrentScore;
+        int finalMultiplier = ScoreManager.Instance.GetMultiplierForCurrentMode();
 
         if (finalResultText != null)
             finalResultText.text = "Final Score: " + finalScore.ToString("#,0") +
-                                   "\nLevel Reached: " + finalLevel;
+                                   "\nScore Multiplier: x" + finalMultiplier;
 
         int hs = ScoreManager.Instance.GetHighScoreForCurrentMode();
-        int hl = ScoreManager.Instance.GetHighScoreLevelForCurrentMode();
+        int bestMultiplier = ScoreManager.Instance.GetMultiplierForCurrentMode();
 
         if (highScoreText != null)
             highScoreText.text = "High Score (" + ScoreManager.Instance.currentMode + "): " +
                                  hs.ToString("#,0") +
-                                 "\nLevel Reached: " + hl;
+                                 "\nBest Multiplier: x" + bestMultiplier;
 
-        bool isNewScore = PlayerPrefs.GetInt("IsNewScore", 0) == 1;
-        bool isNewLevel = PlayerPrefs.GetInt("IsNewLevel", 0) == 1;
+        // Check if new records were set
+        bool isNewScore = finalScore >= hs;
+        bool isNewMultiplier = finalMultiplier >= bestMultiplier;
 
-        if (isNewScore)
+        if (isNewScore && isNewMultiplier)
+        {
+            ShowNewRecord("New High Score & Multiplier!");
+        }
+        else if (isNewScore)
         {
             ShowNewRecord("New High Score!");
         }
-        else if (isNewLevel)
+        else if (isNewMultiplier)
         {
-            ShowNewRecord("New Highest Level!");
+            ShowNewRecord("New Best Multiplier!");
         }
     }
 

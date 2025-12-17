@@ -104,49 +104,12 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // --- Apple Sound Effects ---
-    public void PlayAppleSfx(AppleType type)
-    {
-        if (sfxSource == null) return;
-
-        switch (type)
-        {
-            case AppleType.Normal:
-                if (normalAppleClip != null) sfxSource.PlayOneShot(normalAppleClip);
-                break;
-            case AppleType.Gold:
-                if (goldAppleClip != null) sfxSource.PlayOneShot(goldAppleClip);
-                break;
-            case AppleType.Poison:
-                if (poisonAppleClip != null) sfxSource.PlayOneShot(poisonAppleClip);
-                break;
-        }
-    }
-
-    // --- Basket Removed Sound Effect ---
-    public void PlayBasketRemovedSfx()
-    {
-        if (basketRemovedClip != null && sfxSource != null)
-        {
-            sfxSource.PlayOneShot(basketRemovedClip);
-        }
-    }
-
     // --- Level Up Sound Effect ---
     public void PlayLevelUpSfx()
     {
         if (levelUpClip != null && sfxSource != null)
         {
             sfxSource.PlayOneShot(levelUpClip);
-        }
-    }
-
-    // --- Apple Drop Sound Effect ---
-    public void PlayAppleDropSfx()
-    {
-        if (appleDropClip != null && sfxSource != null)
-        {
-            sfxSource.PlayOneShot(appleDropClip);
         }
     }
 }

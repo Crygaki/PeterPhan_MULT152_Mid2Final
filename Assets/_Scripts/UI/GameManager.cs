@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text progressText;
 
-    private int score = 0;
     private int multiplier = 1;
 
     // Requirements per difficulty (enum keys instead of strings)
@@ -55,6 +54,11 @@ public class GameManager : MonoBehaviour
         SettingsData settings = SettingsManager.LoadSettings();
         currentDifficulty = settings.selectedDifficulty;
 
+        // Reset score and multiplier at the start of each run
+        multiplier = 1;
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.ResetScore();
+
         ResetCounts();
         UpdateUI();
     }
@@ -63,12 +67,19 @@ public class GameManager : MonoBehaviour
     {
         if (!destroyedCounts.ContainsKey(objectType)) return;
 
-        score += points[objectType] * multiplier;
+        // Add score through ScoreManager (with multiplier applied)
+        int gained = points[objectType] * multiplier;
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddScore(gained);
+
         destroyedCounts[objectType]++;
 
         if (PuzzleSolved())
         {
             multiplier++;
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.UpdateMultiplier(multiplier);
+
             ResetCounts();
         }
 
@@ -96,8 +107,8 @@ public class GameManager : MonoBehaviour
 
     void UpdateUI()
     {
-        if (scoreText != null)
-            scoreText.text = $"Score: {score} (x{multiplier})";
+        if (scoreText != null && ScoreManager.Instance != null)
+            scoreText.text = $"Score: {ScoreManager.Instance.CurrentScore} (x{multiplier})";
 
         if (progressText != null)
         {

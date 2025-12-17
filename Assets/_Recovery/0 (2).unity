@@ -1560,7 +1560,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1938943062}
-  - {fileID: 843803033}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &399979090 stripped
@@ -1993,10 +1992,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1882458c4fadac84e95e4c267913605b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIControl
-  fadeCanvasGroup: {fileID: 0}
-  fadeDuration: 1
-  loadingText: {fileID: 0}
-  loadingSpinner: {fileID: 0}
 --- !u!114 &651947980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2484,52 +2479,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3067346306812156608, guid: a8c914e7f7d737f4e9e87b83b7eab19e, type: 3}
   m_PrefabInstance: {fileID: 811024493}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &843803032
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 843803033}
-  - component: {fileID: 843803034}
-  m_Layer: 0
-  m_Name: ExplosionEffectPool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &843803033
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 843803032}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 365860741}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &843803034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 843803032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d99ace38b6179847bee2f3aedd25e75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SimplePool
-  prefab: {fileID: 1007127540951276732, guid: 3ace37360f306cb4aac03640550fa9ef, type: 3}
-  warmup: 20
 --- !u!1001 &844776480
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4542,17 +4491,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 389294050357735396, guid: 86e3969df1c778243a2158c89d248b77, type: 3}
   m_PrefabInstance: {fileID: 1395342369}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1412738026 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8322625780138473318, guid: 319251e487709674d8993b8177b30623, type: 3}
-  m_PrefabInstance: {fileID: 1506740418}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &1413725203
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4793,17 +4731,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!114 &1484051044 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1270304720145239687, guid: 319251e487709674d8993b8177b30623, type: 3}
-  m_PrefabInstance: {fileID: 1506740418}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1495645821
 GameObject:
   m_ObjectHideFlags: 0
@@ -5138,17 +5065,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7677519716253211296, guid: 2bb061a3910d1e548bb4d657dbf296f4, type: 3}
   m_PrefabInstance: {fileID: 1512162526}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1514813221 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5014750555064442831, guid: 319251e487709674d8993b8177b30623, type: 3}
-  m_PrefabInstance: {fileID: 1506740418}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1520321579
 GameObject:
   m_ObjectHideFlags: 0
@@ -5995,7 +5911,7 @@ GameObject:
   - component: {fileID: 1938943062}
   - component: {fileID: 1938943063}
   m_Layer: 0
-  m_Name: StickyBombPool
+  m_Name: ProjectilePool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6121,10 +6037,6 @@ PrefabInstance:
     - target: {fileID: 2219495207794653883, guid: aa969d7fb555fb641858d2ecbf574b18, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8722417793854788277, guid: aa969d7fb555fb641858d2ecbf574b18, type: 3}
-      propertyPath: m_Volume
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8811948921828938706, guid: aa969d7fb555fb641858d2ecbf574b18, type: 3}
       propertyPath: m_Name
@@ -7321,18 +7233,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1938943063}
     - target: {fileID: 2058358206394253666, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: ringIcon
-      value: 
-      objectReference: {fileID: 1484051044}
-    - target: {fileID: 2058358206394253666, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: ringText
-      value: 
-      objectReference: {fileID: 1412738026}
-    - target: {fileID: 2058358206394253666, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: ringOverlay
-      value: 
-      objectReference: {fileID: 1514813221}
-    - target: {fileID: 2058358206394253666, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
       propertyPath: cooldownOverlay
       value: 
       objectReference: {fileID: 352800886}
@@ -7375,22 +7275,6 @@ PrefabInstance:
     - target: {fileID: 2891274435510444387, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3080175011918772357, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: m_NotificationBehavior
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3080175011918772357, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3080175011918772357, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: m_ActionEvents.Array.data[6].m_ActionId
-      value: 74fc1aaa-8a8e-4b13-b17f-b06871124d8a
-      objectReference: {fileID: 0}
-    - target: {fileID: 3080175011918772357, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
-      propertyPath: m_ActionEvents.Array.data[6].m_ActionName
-      value: 'Player/AltShoot[/Mouse/rightButton]'
       objectReference: {fileID: 0}
     - target: {fileID: 6318577109456146364, guid: 70eaffd22c2223d4e9d6a1b46cc75a60, type: 3}
       propertyPath: m_Name
@@ -7748,10 +7632,6 @@ PrefabInstance:
     - target: {fileID: 5967206377712770478, guid: 89a54c7ca2c360e488cd1fb84b69bc2b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8111032267339868182, guid: 89a54c7ca2c360e488cd1fb84b69bc2b, type: 3}
-      propertyPath: m_Volume
-      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

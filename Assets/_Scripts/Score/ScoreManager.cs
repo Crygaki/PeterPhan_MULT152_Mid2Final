@@ -1,25 +1,25 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Events;
+using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
 
+    [Header("Score Settings")]
+    public int startingScore = 0;
+    public int CurrentScore { get; private set; }
+
     [Header("Difficulty Settings")]
-    public DifficultyMode currentMode = DifficultyMode.Easy;
+    public DifficultyMode currentMode = DifficultyMode.Easy;  // uses shared enum
 
-    [SerializeField] private int baseThreshold;
-    [SerializeField] private float growthFactor;
-    [SerializeField] private int appleTreeSpeedIncrease;
-    [SerializeField] private float appleDropDelayMultiplier;
+    [Header("UI")]
+    public TMP_Text scoreText;
 
-    public int score { get; private set; }
-    public int level { get; private set; } = 1;
-    public int sessionTotalScore { get; private set; } = 0;
+    [Header("Events")]
+    public UnityEvent<int> OnScoreChanged;
 
-    // High scores + level reached for each difficulty
-    private int highScoreEasy, highScoreHard, highScoreExtreme;
-    private int highScoreLevelEasy, highScoreLevelHard, highScoreLevelExtreme;
+    private GameData gameData;
 
     void Awake()
     {
@@ -31,190 +31,176 @@ public class ScoreManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-            return;
         }
-
-        // Load saved high scores and levels
-        highScoreEasy = PlayerPrefs.GetInt("HighScore_Easy", 0);
-        highScoreHard = PlayerPrefs.GetInt("HighScore_Hard", 0);
-        highScoreExtreme = PlayerPrefs.GetInt("HighScore_Extreme", 0);
-
-        highScoreLevelEasy = PlayerPrefs.GetInt("HighScoreLevel_Easy", 1);
-        highScoreLevelHard = PlayerPrefs.GetInt("HighScoreLevel_Hard", 1);
-        highScoreLevelExtreme = PlayerPrefs.GetInt("HighScoreLevel_Extreme", 1);
-
-        ApplyDifficultySettings();
     }
 
-    public void SetDifficulty(DifficultyMode mode)
+    void Start()
     {
-        currentMode = mode;
-        ApplyDifficultySettings();
-    }
+        CurrentScore = startingScore;
 
-    private void ApplyDifficultySettings()
-    {
-        switch (currentMode)
+        // Always ensure gameData is valid
+        gameData = GameDataManager.Load();
+        if (gameData == null)
         {
-            case DifficultyMode.Easy:
-                baseThreshold = 1000;
-                growthFactor = 1.3f;
-                appleTreeSpeedIncrease = 1;
-                appleDropDelayMultiplier = 0.9f;
-                break;
-            case DifficultyMode.Hard:
-                baseThreshold = 1500;
-                growthFactor = 1.5f;
-                appleTreeSpeedIncrease = 2;
-                appleDropDelayMultiplier = 0.8f;
-                break;
-            case DifficultyMode.Extreme:
-                baseThreshold = 2000;
-                growthFactor = 2.0f;
-                appleTreeSpeedIncrease = 3;
-                appleDropDelayMultiplier = 0.7f;
-                break;
+            Debug.LogWarning("GameDataManager.Load() returned null, creating defaults.");
+            gameData = new GameData();
         }
+
+        currentMode = gameData.selectedDifficulty;
+        UpdateScoreUI();
+        OnScoreChanged?.Invoke(CurrentScore);
     }
 
-    public void AddPoints(int points)
+    // --- Score Methods ---
+    public void AddScore(int baseAmount)
     {
-        score += points;
-        if (points > 0) sessionTotalScore += points;
-        CheckLevelUp();
+        float multiplier = GetMultiplierForCurrentMode();
+        int amount = Mathf.RoundToInt(baseAmount * multiplier);
+
+        CurrentScore += amount;
+        UpdateScoreUI();
+        OnScoreChanged?.Invoke(CurrentScore);
+
+        UpdateHighScore(CurrentScore);
+        SaveGameData();
     }
 
-    private void CheckLevelUp()
+    public bool UseScore(int amount)
     {
-        while (sessionTotalScore >= GetScoreThreshold(level + 1))
+        if (CurrentScore >= amount)
         {
-            level++;
-            OnLevelUp();
+            CurrentScore -= amount;
+            UpdateScoreUI();
+            OnScoreChanged?.Invoke(CurrentScore);
+            return true;
         }
-    }
-
-    private int GetScoreThreshold(int targetLevel)
-    {
-        if (targetLevel == 1) return 0;
-        return (int)(baseThreshold * Mathf.Pow(growthFactor, targetLevel - 2));
-    }
-
-    private void OnLevelUp()
-    {
-        Debug.Log("Level Up! Current Level: " + level);
-
-        // --- Play Level Up SFX ---
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlayLevelUpSfx();
-        }
-
-        AppleTree tree = FindFirstObjectByType<AppleTree>();
-        if (tree != null)
-        {
-            tree.appleDropDelay *= appleDropDelayMultiplier;
-            tree.speed += appleTreeSpeedIncrease;
-        }
+        return false;
     }
 
     public void ResetScore()
     {
-        score = 0;
-        level = 1;
-        sessionTotalScore = 0;
+        CurrentScore = startingScore;
+        UpdateScoreUI();
+        OnScoreChanged?.Invoke(CurrentScore);
     }
 
-    public void ResetHighScore()
+    // --- Difficulty Methods ---
+    public void SetDifficulty(DifficultyMode mode)
     {
+        currentMode = mode;
+
+        if (gameData == null)
+        {
+            Debug.LogWarning("GameData was null in SetDifficulty, creating defaults.");
+            gameData = new GameData();
+        }
+
+        gameData.selectedDifficulty = mode;
+        SaveGameData();
+        Debug.Log("Difficulty set to: " + mode);
+    }
+
+    // --- High Score Methods ---
+    public int GetHighScoreForCurrentMode()
+    {
+        if (gameData == null) return 0;
+
+        return currentMode switch
+        {
+            DifficultyMode.Easy => gameData.highScoreEasy,
+            DifficultyMode.Hard => gameData.highScoreHard,
+            DifficultyMode.Extreme => gameData.highScoreExtreme,
+            _ => 0
+        };
+    }
+
+    private void UpdateHighScore(int score)
+    {
+        if (gameData == null) return;
+
         switch (currentMode)
         {
             case DifficultyMode.Easy:
-                highScoreEasy = 0;
-                highScoreLevelEasy = 1;
-                PlayerPrefs.SetInt("HighScore_Easy", 0);
-                PlayerPrefs.SetInt("HighScoreLevel_Easy", 1);
+                if (score > gameData.highScoreEasy) gameData.highScoreEasy = score;
                 break;
             case DifficultyMode.Hard:
-                highScoreHard = 0;
-                highScoreLevelHard = 1;
-                PlayerPrefs.SetInt("HighScore_Hard", 0);
-                PlayerPrefs.SetInt("HighScoreLevel_Hard", 1);
+                if (score > gameData.highScoreHard) gameData.highScoreHard = score;
                 break;
             case DifficultyMode.Extreme:
-                highScoreExtreme = 0;
-                highScoreLevelExtreme = 1;
-                PlayerPrefs.SetInt("HighScore_Extreme", 0);
-                PlayerPrefs.SetInt("HighScoreLevel_Extreme", 1);
+                if (score > gameData.highScoreExtreme) gameData.highScoreExtreme = score;
                 break;
         }
-        PlayerPrefs.Save();
     }
 
-    // Getters
-    public int GetHighScoreForCurrentMode()
+    // --- Multiplier Methods ---
+    public int GetMultiplierForCurrentMode()
     {
+        if (gameData == null) return 1;
+
+        return currentMode switch
+        {
+            DifficultyMode.Easy => gameData.multiplierEasy,
+            DifficultyMode.Hard => gameData.multiplierHard,
+            DifficultyMode.Extreme => gameData.multiplierExtreme,
+            _ => 1
+        };
+    }
+
+    public void UpdateMultiplier(int multiplier)
+    {
+        if (gameData == null) return;
+
         switch (currentMode)
         {
-            case DifficultyMode.Easy: return highScoreEasy;
-            case DifficultyMode.Hard: return highScoreHard;
-            case DifficultyMode.Extreme: return highScoreExtreme;
-            default: return 0;
+            case DifficultyMode.Easy:
+                if (multiplier > gameData.multiplierEasy) gameData.multiplierEasy = multiplier;
+                break;
+            case DifficultyMode.Hard:
+                if (multiplier > gameData.multiplierHard) gameData.multiplierHard = multiplier;
+                break;
+            case DifficultyMode.Extreme:
+                if (multiplier > gameData.multiplierExtreme) gameData.multiplierExtreme = multiplier;
+                break;
         }
+        SaveGameData();
     }
 
-    public int GetHighScoreLevelForCurrentMode()
+    // --- Combined Reset ---
+    public void ResetHighScoreAndMultiplier()
     {
+        if (gameData == null) return;
+
         switch (currentMode)
         {
-            case DifficultyMode.Easy: return highScoreLevelEasy;
-            case DifficultyMode.Hard: return highScoreLevelHard;
-            case DifficultyMode.Extreme: return highScoreLevelExtreme;
-            default: return 1;
+            case DifficultyMode.Easy:
+                gameData.highScoreEasy = 0;
+                gameData.multiplierEasy = 0;
+                break;
+            case DifficultyMode.Hard:
+                gameData.highScoreHard = 0;
+                gameData.multiplierHard = 0;
+                break;
+            case DifficultyMode.Extreme:
+                gameData.highScoreExtreme = 0;
+                gameData.multiplierExtreme = 0;
+                break;
         }
+        SaveGameData();
     }
 
-    public void ReloadScene()
+    private void UpdateScoreUI()
     {
-        // Compare before updating
-        int hs = GetHighScoreForCurrentMode();
-        int hl = GetHighScoreLevelForCurrentMode();
+        if (scoreText != null)
+            scoreText.text = $"Score: {CurrentScore}";
+    }
 
-        bool isNewScore = score > hs;
-        bool isNewLevel = (score == hs && level > hl);
-
-        PlayerPrefs.SetInt("IsNewScore", isNewScore ? 1 : 0);
-        PlayerPrefs.SetInt("IsNewLevel", isNewLevel ? 1 : 0);
-
-        // Update high score if beaten
-        if (isNewScore || isNewLevel)
+    private void SaveGameData()
+    {
+        if (gameData == null)
         {
-            switch (currentMode)
-            {
-                case DifficultyMode.Easy:
-                    highScoreEasy = score;
-                    highScoreLevelEasy = level;
-                    PlayerPrefs.SetInt("HighScore_Easy", highScoreEasy);
-                    PlayerPrefs.SetInt("HighScoreLevel_Easy", highScoreLevelEasy);
-                    break;
-                case DifficultyMode.Hard:
-                    highScoreHard = score;
-                    highScoreLevelHard = level;
-                    PlayerPrefs.SetInt("HighScore_Hard", highScoreHard);
-                    PlayerPrefs.SetInt("HighScoreLevel_Hard", highScoreLevelHard);
-                    break;
-                case DifficultyMode.Extreme:
-                    highScoreExtreme = score;
-                    highScoreLevelExtreme = level;
-                    PlayerPrefs.SetInt("HighScore_Extreme", highScoreExtreme);
-                    PlayerPrefs.SetInt("HighScoreLevel_Extreme", highScoreLevelExtreme);
-                    break;
-            }
+            Debug.LogWarning("Attempted to save null GameData, creating defaults.");
+            gameData = new GameData();
         }
-
-        PlayerPrefs.SetInt("FinalScore", score);
-        PlayerPrefs.SetInt("FinalLevel", level);
-        PlayerPrefs.Save();
-
-        SceneManager.LoadScene("GameOverScene");
+        GameDataManager.Save(gameData);
     }
 }

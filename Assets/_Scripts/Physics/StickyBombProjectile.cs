@@ -2,58 +2,79 @@ using UnityEngine;
 
 public class StickyBombProjectile : MonoBehaviour
 {
+    [Header("Projectile Settings")]
     public float speed = 20f;
     public float explosionDelay = 2f;
-    public GameObject explosionEffect;
-    private SimplePool pool;
+
+    [Header("Ring Bomb Settings")]
+    public float ringRadius = 2f;
+    public float ringLaunchSpeed = 15f;
+
+    [Header("Cooldown Settings")]
+    public static float timeCooldown = 1f;
+    public static int scoreCooldown = 10;
+
+    private SimplePool pool; // bomb pool
     private AudioSource explosionAudio;
     private GameObject targetToDestroy;
     private float t;
 
-    // --- Cooldown fields ---
-    public static float cooldownTime = 1f; // 1 second between bombs
     public static float lastFireTime = -Mathf.Infinity;
+    private bool spawnRingOnExplode = false;
 
-    /// <summary>
-    /// Call this instead of directly spawning a bomb.
-    /// Returns true if bomb was successfully initialized, false if still on cooldown.
-    /// </summary>
-    public static bool TrySpawn(SimplePool p, Vector3 position, Quaternion rotation)
+    public static bool TrySpawn(SimplePool p, Vector3 position, Quaternion rotation, bool spawnRing = false)
     {
-        // Enforce cooldown
-        if (Time.time < lastFireTime + cooldownTime)
+        if (!spawnRing)
         {
-            return false;
+            if (Time.time < lastFireTime + timeCooldown)
+                return false;
+        }
+        else
+        {
+            if (ScoreManager.Instance == null || ScoreManager.Instance.CurrentScore < scoreCooldown)
+                return false;
         }
 
         GameObject bomb = p.Get(position, rotation);
-        StickyBombProjectile proj = bomb.GetComponent<StickyBombProjectile>();
-        proj.Init(p);
+        if (bomb == null || bomb.Equals(null)) return false;
 
-        lastFireTime = Time.time;
+        StickyBombProjectile proj = bomb.GetComponent<StickyBombProjectile>();
+        proj.Init(p, spawnRing);
+
+        if (!spawnRing)
+            lastFireTime = Time.time;
+        else
+            ScoreManager.Instance.UseScore(scoreCooldown);
+
         return true;
     }
 
-    public void Init(SimplePool p)
+    public void Init(SimplePool p, bool spawnRing = false)
     {
         pool = p;
         t = 0f;
         targetToDestroy = null;
+        spawnRingOnExplode = spawnRing;
+
         transform.SetParent(null);
+
         var rb = GetComponent<Rigidbody>();
-        if (rb != null) rb.isKinematic = false;
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
         gameObject.SetActive(true);
 
         if (explosionAudio == null)
-        {
             explosionAudio = GameObject.Find("AS_StickyBombEx")?.GetComponent<AudioSource>();
-        }
     }
 
     void Update()
     {
         if (!gameObject.activeSelf || pool == null) return;
-
         transform.position += transform.forward * speed * Time.deltaTime;
         t += Time.deltaTime;
     }
@@ -78,8 +99,22 @@ public class StickyBombProjectile : MonoBehaviour
 
     void Explode()
     {
-        if (explosionEffect != null)
-            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        // Spawn explosion effect from pool
+        if (SimplePool.ExplosionPoolInstance != null)
+        {
+            GameObject effect = SimplePool.ExplosionPoolInstance.Get(transform.position, Quaternion.identity);
+
+            if (effect != null && !effect.Equals(null))
+            {
+                var ps = effect.GetComponent<ParticleSystem>();
+                if (ps != null)
+                {
+                    ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    ps.Clear();
+                    ps.Play();
+                }
+            }
+        }
 
         if (explosionAudio != null)
             explosionAudio.Play();
@@ -96,12 +131,53 @@ public class StickyBombProjectile : MonoBehaviour
         {
             string type = targetToDestroy.tag;
             GameManager.instance?.ObjectDestroyed(type);
-            Destroy(targetToDestroy);
+
+            // Only destroy enemies, never pooled projectiles/effects
+            if (!targetToDestroy.TryGetComponent<StickyBombProjectile>(out _))
+            {
+                Destroy(targetToDestroy);
+            }
+            else
+            {
+                var bombPool = targetToDestroy.GetComponent<StickyBombProjectile>()?.pool;
+                if (bombPool != null)
+                    bombPool.Return(targetToDestroy);
+            }
         }
 
-        transform.SetParent(null);
+        if (spawnRingOnExplode)
+            SpawnRingBombs();
+
         var rbSelf = GetComponent<Rigidbody>();
-        if (rbSelf != null) rbSelf.isKinematic = false;
+        if (rbSelf != null)
+        {
+            rbSelf.isKinematic = false;
+            rbSelf.linearVelocity = Vector3.zero;
+            rbSelf.angularVelocity = Vector3.zero;
+        }
+
         pool.Return(gameObject);
+    }
+
+    void SpawnRingBombs()
+    {
+        if (pool == null) return;
+
+        for (int i = 0; i < 8; i++)
+        {
+            float angle = i * 45f;
+            Vector3 dir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
+            Vector3 spawnPos = transform.position + dir * ringRadius;
+
+            GameObject bomb = pool.Get(spawnPos, Quaternion.LookRotation(dir));
+            if (bomb == null || bomb.Equals(null)) continue;
+
+            StickyBombProjectile proj = bomb.GetComponent<StickyBombProjectile>();
+            proj.Init(pool, false);
+
+            Rigidbody rb = bomb.GetComponent<Rigidbody>();
+            if (rb != null)
+                rb.linearVelocity = dir * ringLaunchSpeed; // Unity 6+ API
+        }
     }
 }
