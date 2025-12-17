@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class UIControl : MonoBehaviour
 {
@@ -31,17 +32,23 @@ public class UIControl : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(transform.root.gameObject);
 
+        // Ensure only one EventSystem exists (new API)
+        var eventSystems = Object.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+        if (eventSystems.Length > 1)
+        {
+            for (int i = 1; i < eventSystems.Length; i++)
+                Destroy(eventSystems[i].gameObject);
+        }
+
         if (fadeCanvasGroup != null)
+        {
             fadeCanvasGroup.alpha = 0f;
+            fadeCanvasGroup.blocksRaycasts = false; // prevent blocking clicks
+        }
 
-        if (loadingText != null)
-            loadingText.gameObject.SetActive(false);
-
-        if (loadingSpinner != null)
-            loadingSpinner.gameObject.SetActive(false);
-
-        if (informationCanvas != null)
-            informationCanvas.SetActive(false); // start hidden by default
+        if (loadingText != null) loadingText.gameObject.SetActive(false);
+        if (loadingSpinner != null) loadingSpinner.gameObject.SetActive(false);
+        if (informationCanvas != null) informationCanvas.SetActive(false);
     }
 
     // --- Scene Management with Fade ---
@@ -51,6 +58,7 @@ public class UIControl : MonoBehaviour
         if (mainCanvas != null)
             mainCanvas.SetActive(false);
 
+        // Apply difficulty from saved data
         GameData data = GameDataManager.Load();
         if (ScoreManager.Instance != null && data != null)
             ScoreManager.Instance.SetDifficulty(data.selectedDifficulty);
@@ -58,12 +66,23 @@ public class UIControl : MonoBehaviour
         StartCoroutine(FadeAndLoadScene("StickyBomb"));
     }
 
+    // Restart the game from the beginning (load StickyBomb)
     public void PlayAgain()
     {
+        // Reset score for a fresh run
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.ResetScore();
 
-        StartCoroutine(FadeAndLoadScene("MainMenu"));
+        // Apply difficulty from saved data
+        GameData data = GameDataManager.Load();
+        if (ScoreManager.Instance != null && data != null)
+            ScoreManager.Instance.SetDifficulty(data.selectedDifficulty);
+
+        // Hide main canvas if we’re coming from MainMenu
+        if (mainCanvas != null)
+            mainCanvas.SetActive(false);
+
+        StartCoroutine(FadeAndLoadScene("StickyBomb"));
     }
 
     public void QuitGame()
@@ -114,6 +133,10 @@ public class UIControl : MonoBehaviour
         // Hide loading UI
         if (loadingText != null) loadingText.gameObject.SetActive(false);
         if (loadingSpinner != null) loadingSpinner.gameObject.SetActive(false);
+
+        // Safety: ensure overlay doesn’t block clicks after fade-in
+        if (fadeCanvasGroup != null)
+            fadeCanvasGroup.blocksRaycasts = false;
     }
 
     private IEnumerator Fade(float targetAlpha)
@@ -125,7 +148,7 @@ public class UIControl : MonoBehaviour
 
         while (elapsed < fadeDuration)
         {
-            if (fadeCanvasGroup == null) yield break; // stop if destroyed
+            if (fadeCanvasGroup == null) yield break;
 
             elapsed += Time.deltaTime;
             fadeCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed / fadeDuration);
@@ -137,7 +160,9 @@ public class UIControl : MonoBehaviour
             yield return null;
         }
 
-        if (fadeCanvasGroup != null)
-            fadeCanvasGroup.alpha = targetAlpha;
+        fadeCanvasGroup.alpha = targetAlpha;
+
+        // Only block raycasts when fully faded to black
+        fadeCanvasGroup.blocksRaycasts = (targetAlpha >= 1f);
     }
 }

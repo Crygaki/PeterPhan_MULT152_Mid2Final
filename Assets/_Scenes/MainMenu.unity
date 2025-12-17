@@ -2741,7 +2741,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4221,7 +4221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   musicSource: {fileID: 1293984395}
   sfxSource: {fileID: 1632420745}
-  mainMenuMusic: {fileID: 8300000, guid: 78093db343001274892fbd4e58ed7b64, type: 3}
+  mainMenuMusic: {fileID: 8300000, guid: 6c54e776925c7b34598f551ad51dc259, type: 3}
   gameplayMusic: {fileID: 8300000, guid: f5550ee0c6226a341909cf8d6b04b2fd, type: 3}
   gameOverMusic: {fileID: 8300000, guid: d9f47c2625fcffe47a0d563aeb0306a4, type: 3}
   mouseOverClip: {fileID: 8300000, guid: 2c1f68069de4e3542bcb69cfd3d7029e, type: 3}

@@ -58,7 +58,7 @@ public class AudioManager : MonoBehaviour
             case "MainMenu":
                 PlayMusic(mainMenuMusic);
                 break;
-            case "Scene_0":
+            case "StickyBomb":
                 PlayMusic(gameplayMusic);
                 break;
             case "GameOverScene":
