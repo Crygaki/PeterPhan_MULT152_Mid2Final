@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4902528773510476748}
   - component: {fileID: 8298253990637240115}
   - component: {fileID: 6439757077411685189}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Leg_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 8365489274518724257}
   - component: {fileID: 6589020070651964511}
   - component: {fileID: 8138395870997756279}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Big_Boss
   m_TagString: Boss
   m_Icon: {fileID: 0}
@@ -257,6 +257,9 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 00e13b5e15f726f43a634f1dc2c23f61, type: 2}
   hud: {fileID: 0}
   restartUI: {fileID: 0}
+  drainHealthOverTime: 1
+  drainInterval: 1
+  drainAmount: 1
 --- !u!114 &4549156859260075040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -473,7 +476,7 @@ GameObject:
   - component: {fileID: 1295177758965954949}
   - component: {fileID: 1278088156253790809}
   - component: {fileID: 5453276610389400590}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Mouth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -584,7 +587,7 @@ GameObject:
   - component: {fileID: 6265575185179154285}
   - component: {fileID: 2250210465954564265}
   - component: {fileID: 7923687546489685371}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -698,7 +701,7 @@ GameObject:
   - component: {fileID: 2447729796969220314}
   - component: {fileID: 8299690307386791465}
   - component: {fileID: 304518015019806272}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Feet_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -809,7 +812,7 @@ GameObject:
   - component: {fileID: 7338909603225123434}
   - component: {fileID: 4032573240319534212}
   - component: {fileID: 3626064171276275436}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Eye_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -920,7 +923,7 @@ GameObject:
   - component: {fileID: 7547173734072460082}
   - component: {fileID: 5994681444980536643}
   - component: {fileID: 6527780405710846050}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Hand_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1031,7 +1034,7 @@ GameObject:
   - component: {fileID: 1942415653482492080}
   - component: {fileID: 4460477563056167605}
   - component: {fileID: 4475737391535987442}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Leg_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1145,7 +1148,7 @@ GameObject:
   - component: {fileID: 780902766755027243}
   - component: {fileID: 282484962391494102}
   - component: {fileID: 2685664587734181108}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Arm_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1259,7 +1262,7 @@ GameObject:
   - component: {fileID: 128321545621856053}
   - component: {fileID: 8506743710024962588}
   - component: {fileID: 6463937539431321733}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Hand_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1370,7 +1373,7 @@ GameObject:
   - component: {fileID: 7868298560943657744}
   - component: {fileID: 6050822959298384788}
   - component: {fileID: 6696365189254481719}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Eye_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1481,7 +1484,7 @@ GameObject:
   - component: {fileID: 8066297883999679003}
   - component: {fileID: 6637710850673775145}
   - component: {fileID: 2793425440564841098}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Arm_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1595,7 +1598,7 @@ GameObject:
   - component: {fileID: 210274489437084744}
   - component: {fileID: 759951387873647880}
   - component: {fileID: 1309413705569676738}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: B_Feet_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}

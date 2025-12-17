@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4370529539443257409}
   - component: {fileID: 3512969445348197523}
   - component: {fileID: 2154381682642515294}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: E_Cylinder
   m_TagString: MinionCylinder
   m_Icon: {fileID: 0}
@@ -139,6 +139,11 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 9f4cb75f5893c0b4d952651747f09ffc, type: 2}
   hud: {fileID: 0}
   restartUI: {fileID: 0}
+  drainHealthOverTime: 1
+  drainInterval: 1
+  drainAmount: 1
+  collisionDamage: 1
+  collisionCooldown: 1
 --- !u!114 &-5582131552409124173
 MonoBehaviour:
   m_ObjectHideFlags: 0

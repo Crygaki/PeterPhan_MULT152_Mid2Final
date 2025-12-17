@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using System.IO; // for File IO
 
 public class ScoreManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class ScoreManager : MonoBehaviour
     public UnityEvent<int> OnScoreChanged;
 
     private GameData gameData;
+    private string savePath;
 
     void Awake()
     {
@@ -30,6 +32,9 @@ public class ScoreManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            savePath = Path.Combine(Application.persistentDataPath, "gameData.json");
+            LoadGameData();
         }
         else
         {
@@ -42,7 +47,6 @@ public class ScoreManager : MonoBehaviour
         CurrentScore = startingScore;
         RmbCooldownScore = startingScore;
 
-        gameData = GameDataManager.Load();
         if (gameData == null)
             gameData = new GameData();
 
@@ -88,6 +92,7 @@ public class ScoreManager : MonoBehaviour
             CurrentScore -= amount;
             UpdateScoreUI();
             OnScoreChanged?.Invoke(CurrentScore);
+            SaveGameData();
             return true;
         }
         return false;
@@ -99,6 +104,7 @@ public class ScoreManager : MonoBehaviour
         {
             RmbCooldownScore -= amount;
             UpdateScoreUI();
+            SaveGameData();
             return true;
         }
         return false;
@@ -110,6 +116,7 @@ public class ScoreManager : MonoBehaviour
         RmbCooldownScore = startingScore;
         UpdateScoreUI();
         OnScoreChanged?.Invoke(CurrentScore);
+        SaveGameData();
     }
 
     // --- Difficulty Methods ---
@@ -223,11 +230,31 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    // --- Robust Save/Load ---
     private void SaveGameData()
     {
         if (gameData == null)
             gameData = new GameData();
 
-        GameDataManager.Save(gameData);
+        string json = JsonUtility.ToJson(gameData, true);
+        File.WriteAllText(savePath, json);
+    }
+
+    private void LoadGameData()
+    {
+        if (File.Exists(savePath))
+        {
+            string json = File.ReadAllText(savePath);
+            gameData = JsonUtility.FromJson<GameData>(json);
+        }
+        else
+        {
+            gameData = new GameData();
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveGameData(); // ensure persistence on quit
     }
 }

@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
         {
             int requirement = requirements[currentDifficulty];
             progressText.text =
-                $"Current Difficulty: {currentDifficulty}\n" +
+                $"SCORE MULTIPLIER OBJECTIVE\n" +
                 $"Boss: {destroyedCounts["Boss"]}/{requirement}\n" +
                 $"Capsule: {destroyedCounts["MinionCapsule"]}/{requirement}\n" +
                 $"Cube: {destroyedCounts["MinionCube"]}/{requirement}\n" +

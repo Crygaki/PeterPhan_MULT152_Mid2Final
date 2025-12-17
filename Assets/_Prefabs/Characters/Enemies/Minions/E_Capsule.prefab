@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: -7853887571945945185}
   - component: {fileID: 6434947960733168401}
   - component: {fileID: 6993142944138108311}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: E_Capsule
   m_TagString: MinionCapsule
   m_Icon: {fileID: 0}
@@ -138,6 +138,11 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 9f4cb75f5893c0b4d952651747f09ffc, type: 2}
   hud: {fileID: 0}
   restartUI: {fileID: 0}
+  drainHealthOverTime: 1
+  drainInterval: 1
+  drainAmount: 1
+  collisionDamage: 1
+  collisionCooldown: 1
 --- !u!114 &-8310804225939912052
 MonoBehaviour:
   m_ObjectHideFlags: 0

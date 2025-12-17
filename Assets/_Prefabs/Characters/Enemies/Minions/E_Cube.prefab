@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 1893632131579780263}
   - component: {fileID: 1107256609797268055}
   - component: {fileID: 1547088081193408597}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: E_Cube
   m_TagString: MinionCube
   m_Icon: {fileID: 0}
@@ -137,6 +137,11 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 9f4cb75f5893c0b4d952651747f09ffc, type: 2}
   hud: {fileID: 0}
   restartUI: {fileID: 0}
+  drainHealthOverTime: 1
+  drainInterval: 1
+  drainAmount: 1
+  collisionDamage: 1
+  collisionCooldown: 1
 --- !u!114 &6908061146418441713
 MonoBehaviour:
   m_ObjectHideFlags: 0

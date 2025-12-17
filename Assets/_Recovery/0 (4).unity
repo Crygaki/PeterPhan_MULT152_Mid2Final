@@ -203,8 +203,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 966188334}
-        m_TargetAssemblyTypeName: GameOverUI, Assembly-CSharp
+      - m_Target: {fileID: 966188336}
+        m_TargetAssemblyTypeName: UIControl, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -566,6 +566,8 @@ GameObject:
   m_Component:
   - component: {fileID: 966188332}
   - component: {fileID: 966188334}
+  - component: {fileID: 966188335}
+  - component: {fileID: 966188336}
   m_Layer: 0
   m_Name: GameOverManager
   m_TagString: Untagged
@@ -603,6 +605,36 @@ MonoBehaviour:
   finalResultText: {fileID: 1106384941}
   highScoreText: {fileID: 1251340477}
   newRecordText: {fileID: 547883725}
+--- !u!114 &966188335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966188331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8812fc281f0738f4a9c94aad2d817aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShowCursor
+--- !u!114 &966188336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966188331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1882458c4fadac84e95e4c267913605b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIControl
+  fadeCanvasGroup: {fileID: 0}
+  fadeDuration: 1
+  loadingText: {fileID: 0}
+  loadingSpinner: {fileID: 0}
+  informationCanvas: {fileID: 0}
+  mainCanvas: {fileID: 0}
 --- !u!1 &1106384939
 GameObject:
   m_ObjectHideFlags: 0
@@ -1715,8 +1747,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 966188334}
-        m_TargetAssemblyTypeName: GameOverUI, Assembly-CSharp
+      - m_Target: {fileID: 966188336}
+        m_TargetAssemblyTypeName: UIControl, Assembly-CSharp
         m_MethodName: PlayAgain
         m_Mode: 1
         m_Arguments:
