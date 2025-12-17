@@ -17,6 +17,9 @@ public class UIControl : MonoBehaviour
     [Header("Information Panel")]
     [SerializeField] private GameObject informationCanvas; // assign via Inspector
 
+    [Header("Main Canvas")]
+    [SerializeField] private GameObject mainCanvas; // assign via Inspector
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -44,6 +47,10 @@ public class UIControl : MonoBehaviour
     // --- Scene Management with Fade ---
     public void StartGame()
     {
+        // Hide the main canvas at the start of the game
+        if (mainCanvas != null)
+            mainCanvas.SetActive(false);
+
         GameData data = GameDataManager.Load();
         if (ScoreManager.Instance != null && data != null)
             ScoreManager.Instance.SetDifficulty(data.selectedDifficulty);
